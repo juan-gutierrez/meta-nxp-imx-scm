@@ -1,0 +1,102 @@
+From 60bb0e81a46bea4786f3046179f7f4b3f3a71dc0 Mon Sep 17 00:00:00 2001
+From: Alejandro Sierra <b18039@freescale.com>
+Date: Tue, 16 Feb 2016 15:16:59 -0600
+Subject: [PATCH 19/21] Add support for imx6dqscm HVB board
+
+Support added for imx6dqscm HVB validation board.
+
+Signed-off-by: Alejandro Sierra <b18039@freescale.com>
+---
+ board/freescale/mx6dqscmqwks/mx6dqscmqwks.c | 19 ++++++++++++++++---
+ configs/mx6dqscm_1gb_fix_hvb_defconfig      |  5 +++++
+ include/configs/mx6dqscmqwks.h              |  5 +++++
+ 3 files changed, 26 insertions(+), 3 deletions(-)
+ create mode 100644 configs/mx6dqscm_1gb_fix_hvb_defconfig
+
+diff --git a/board/freescale/mx6dqscmqwks/mx6dqscmqwks.c b/board/freescale/mx6dqscmqwks/mx6dqscmqwks.c
+index 27f7063..9a0a010 100644
+--- a/board/freescale/mx6dqscmqwks/mx6dqscmqwks.c
++++ b/board/freescale/mx6dqscmqwks/mx6dqscmqwks.c
+@@ -114,10 +114,17 @@ void dram_init_banksize(void)
+        gd->bd->bi_dram[1].size = PHYS_SDRAM_1_SIZE;
+ }
+ #endif
+-static iomux_v3_cfg_t const uart1_pads[] = {
++#ifdef CONFIG_SCMHVB
++iomux_v3_cfg_t const uart_pads[] = {
++	MX6_PAD_KEY_COL0__UART4_TX_DATA | MUX_PAD_CTRL(UART_PAD_CTRL),
++	MX6_PAD_KEY_ROW0__UART4_RX_DATA | MUX_PAD_CTRL(UART_PAD_CTRL),
++};
++#else
++static iomux_v3_cfg_t const uart_pads[] = {
+ 	MX6_PAD_CSI0_DAT10__UART1_TX_DATA | MUX_PAD_CTRL(UART_PAD_CTRL),
+ 	MX6_PAD_CSI0_DAT11__UART1_RX_DATA | MUX_PAD_CTRL(UART_PAD_CTRL),
+ };
++#endif
+ 
+ static iomux_v3_cfg_t const enet_pads[] = {
+ 	MX6_PAD_ENET_MDIO__ENET_MDIO		| MUX_PAD_CTRL(ENET_PAD_CTRL),
+@@ -335,7 +342,7 @@ static iomux_v3_cfg_t const epdc_disable_pads[] = {
+ 
+ static void setup_iomux_uart(void)
+ {
+-	imx_iomux_v3_setup_multiple_pads(uart1_pads, ARRAY_SIZE(uart1_pads));
++	imx_iomux_v3_setup_multiple_pads(uart_pads, ARRAY_SIZE(uart_pads));
+ }
+ 
+ #ifdef CONFIG_FSL_ESDHC
+@@ -391,7 +398,11 @@ int board_mmc_getcd(struct mmc *mmc)
+ 		ret = !gpio_get_value(USDHC2_CD_GPIO);
+ 		break;
+ 	case USDHC3_BASE_ADDR:
++#ifdef CONFIG_SCMHVB
++		ret = 1;
++#else
+ 		ret = !gpio_get_value(USDHC3_CD_GPIO);
++#endif
+ 		break;
+ 	case USDHC4_BASE_ADDR:
+ 		ret = 1; /* eMMC/uSDHC4 is always present */
+@@ -1253,7 +1264,9 @@ int board_late_init(void)
+ 
+ int checkboard(void)
+ {
+-#ifdef CONFIG_SCMEVB
++#ifdef CONFIG_SCMHVB
++	puts("Board: MX6DQSCM-HVB\n");
++#elif CONFIG_SCMEVB
+ 	puts("Board: MX6DQSCM-EVB\n");
+ #else
+ 	puts("Board: MX6DQSCM-QWKS\n");
+diff --git a/configs/mx6dqscm_1gb_fix_hvb_defconfig b/configs/mx6dqscm_1gb_fix_hvb_defconfig
+new file mode 100644
+index 0000000..ecf5d65
+--- /dev/null
++++ b/configs/mx6dqscm_1gb_fix_hvb_defconfig
+@@ -0,0 +1,5 @@
++CONFIG_SYS_EXTRA_OPTIONS="IMX_CONFIG=board/freescale/mx6dqscmqwks/imximage_scm_lpddr2.cfg,MX6Q,DDR_MB=1024,SYS_USE_SPINOR,DEFAULT_FDT_FILE=\"imx6dqscm-1gb-hvb-fix-ldo.dtb\",SCMHVB"
++CONFIG_ARM=y
++CONFIG_TARGET_MX6DQSCMQWKS=y
++CONFIG_DM=y
++CONFIG_DM_THERMAL=y
+diff --git a/include/configs/mx6dqscmqwks.h b/include/configs/mx6dqscmqwks.h
+index f65b1e7..e1babdc 100644
+--- a/include/configs/mx6dqscmqwks.h
++++ b/include/configs/mx6dqscmqwks.h
+@@ -18,8 +18,13 @@
+ #endif
+ 
+ #define CONFIG_MACH_TYPE	3980
++#ifdef CONFIG_SCMHVB
++#define CONFIG_MXC_UART_BASE	UART4_BASE
++#define CONFIG_CONSOLE_DEV		"ttymxc3"
++#else
+ #define CONFIG_MXC_UART_BASE	UART1_BASE
+ #define CONFIG_CONSOLE_DEV		"ttymxc0"
++#endif
+ #define CONFIG_MMCROOT			"/dev/mmcblk2p2"  /* SDHC3 */
+ #define CONFIG_DMFC				"dmfc=3"
+ #define PHYS_SDRAM_SIZE		(1u * 1024 * 1024 * 1024)
+-- 
+1.9.1
+

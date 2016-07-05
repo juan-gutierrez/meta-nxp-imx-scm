@@ -1,0 +1,62 @@
+From 2257603d0924c951444e189b860209f20656c11f Mon Sep 17 00:00:00 2001
+From: Alejandro Sierra <b18039@freescale.com>
+Date: Fri, 12 Feb 2016 18:58:52 -0600
+Subject: [PATCH 29/37] Revert "ARM: dts: change clock parent for ldb-di
+ interface"
+
+This reverts commit dc67a9e8320deb3fde188782cdf73e8f802cacde.
+---
+ arch/arm/boot/dts/imx6dqscm-1gb-evb-interleave-ldo.dts | 5 -----
+ arch/arm/boot/dts/imx6dqscm-qwks-rev1.dtsi             | 4 ++--
+ arch/arm/boot/dts/imx6dqscm-qwks-rev2.dtsi             | 4 ++--
+ 3 files changed, 4 insertions(+), 9 deletions(-)
+
+diff --git a/arch/arm/boot/dts/imx6dqscm-1gb-evb-interleave-ldo.dts b/arch/arm/boot/dts/imx6dqscm-1gb-evb-interleave-ldo.dts
+index ee85d10..2635286 100644
+--- a/arch/arm/boot/dts/imx6dqscm-1gb-evb-interleave-ldo.dts
++++ b/arch/arm/boot/dts/imx6dqscm-1gb-evb-interleave-ldo.dts
+@@ -33,11 +33,6 @@
+ 	};
+ };
+ 
+-&clks {
+-        fsl,ldb-di0-parent = <&clks IMX6QDL_CLK_MMDC_CH1_AXI>;
+-        fsl,ldb-di1-parent = <&clks IMX6QDL_CLK_MMDC_CH1_AXI>;
+-};
+-
+ &i2c1 {
+ 	ov564x: ov564x@3c {
+ 		DOVDD-supply = <&sw4_reg>; /* 1.8v */
+diff --git a/arch/arm/boot/dts/imx6dqscm-qwks-rev1.dtsi b/arch/arm/boot/dts/imx6dqscm-qwks-rev1.dtsi
+index 00accc7..a57f186 100644
+--- a/arch/arm/boot/dts/imx6dqscm-qwks-rev1.dtsi
++++ b/arch/arm/boot/dts/imx6dqscm-qwks-rev1.dtsi
+@@ -121,8 +121,8 @@
+ };
+ 
+ &clks {
+-        fsl,ldb-di0-parent = <&clks IMX6QDL_CLK_MMDC_CH1_AXI>;
+-        fsl,ldb-di1-parent = <&clks IMX6QDL_CLK_MMDC_CH1_AXI>;
++	fsl,ldb-di0-parent = <&clks IMX6QDL_CLK_PLL2_PFD0_352M>;
++	fsl,ldb-di1-parent = <&clks IMX6QDL_CLK_PLL2_PFD0_352M>;
+ };
+ 
+ &ecspi1 {
+diff --git a/arch/arm/boot/dts/imx6dqscm-qwks-rev2.dtsi b/arch/arm/boot/dts/imx6dqscm-qwks-rev2.dtsi
+index f5c2393..09ae114 100644
+--- a/arch/arm/boot/dts/imx6dqscm-qwks-rev2.dtsi
++++ b/arch/arm/boot/dts/imx6dqscm-qwks-rev2.dtsi
+@@ -134,8 +134,8 @@
+ };
+ 
+ &clks {
+-        fsl,ldb-di0-parent = <&clks IMX6QDL_CLK_MMDC_CH1_AXI>;
+-        fsl,ldb-di1-parent = <&clks IMX6QDL_CLK_MMDC_CH1_AXI>;
++	fsl,ldb-di0-parent = <&clks IMX6QDL_CLK_PLL2_PFD0_352M>;
++	fsl,ldb-di1-parent = <&clks IMX6QDL_CLK_PLL2_PFD0_352M>;
+ };
+ 
+ &ecspi1 {
+-- 
+1.9.1
+

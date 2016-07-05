@@ -1,0 +1,42 @@
+From 55b1f29da041a684ceea96961f16f92f64f80c00 Mon Sep 17 00:00:00 2001
+From: Alejandro Sierra <b18039@freescale.com>
+Date: Fri, 22 Jan 2016 15:21:16 -0600
+Subject: [PATCH 14/21] Enable imx6dqscm 2GB support on fix mode
+
+Enable imx6dqscm 2GB support on fix mode
+
+Signed-off-by: Alejandro Sierra <b18039@freescale.com>
+---
+ include/configs/mx6dqscmqwks.h | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/include/configs/mx6dqscmqwks.h b/include/configs/mx6dqscmqwks.h
+index aa0cb18..b76a502 100644
+--- a/include/configs/mx6dqscmqwks.h
++++ b/include/configs/mx6dqscmqwks.h
+@@ -37,6 +37,14 @@
+ #ifndef CONFIG_INTERLEAVING_MODE
+ #undef CONFIG_NR_DRAM_BANKS
+ #define CONFIG_NR_DRAM_BANKS            2
++#ifdef CONFIG_SCM_LPDDR2_2GB
++#define PHYS_SDRAM_0            MMDC0_ARB_BASE_ADDR     /* SDRAM Bank #1 */
++#define PHYS_SDRAM_1            MMDC1_ARB_BASE_ADDR     /* SDRAM Bank #2 */
++
++#define PHYS_SDRAM_0_SIZE       (1024 * 1024 * 1024)      /* 1024MB */
++#define PHYS_SDRAM_1_SIZE       (1024 * 1024 * 1024)      /* 1024MB */
++
++#else
+ 
+ #define PHYS_SDRAM_0            MMDC0_ARB_BASE_ADDR     /* SDRAM Bank #1 */
+ #define PHYS_SDRAM_1            MMDC1_ARB_BASE_ADDR     /* SDRAM Bank #2 */
+@@ -44,6 +52,7 @@
+ #define PHYS_SDRAM_0_SIZE       (512 * 1024 * 1024)      /* 512MB */
+ #define PHYS_SDRAM_1_SIZE       (512 * 1024 * 1024)      /* 512MB */
+ #endif
++#endif
+ /*
+  * imx6 q/dl/solo pcie would be failed to work properly in kernel, if
+  * the pcie module is iniialized/enumerated both in uboot and linux
+-- 
+1.9.1
+

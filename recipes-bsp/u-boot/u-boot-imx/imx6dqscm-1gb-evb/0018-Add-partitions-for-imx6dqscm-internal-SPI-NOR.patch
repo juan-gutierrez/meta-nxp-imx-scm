@@ -1,0 +1,150 @@
+From 192cb5649040a00c67d88bfa2b0a2cf0ef295b8e Mon Sep 17 00:00:00 2001
+From: Alejandro Sierra <b18039@freescale.com>
+Date: Mon, 15 Feb 2016 18:01:56 -0600
+Subject: [PATCH 18/21] Add partitions for imx6dqscm internal SPI-NOR
+
+Uboot parameters added to set kernel partitions for imx6dqscm
+internal 16MB SPI-NOR. This allows the option to load fully Linux image
+from internal SPI-NOR flash.
+
+Signed-off-by: Alejandro Sierra <b18039@freescale.com>
+---
+ include/configs/mx6dqscmqwks.h | 125 ++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 124 insertions(+), 1 deletion(-)
+
+diff --git a/include/configs/mx6dqscmqwks.h b/include/configs/mx6dqscmqwks.h
+index 3fd4ee1..f65b1e7 100644
+--- a/include/configs/mx6dqscmqwks.h
++++ b/include/configs/mx6dqscmqwks.h
+@@ -122,4 +122,127 @@
+ 	#define CONFIG_WAVEFORM_BUF_SIZE		0x200000
+ #endif /* CONFIG_SPLASH_SCREEN && CONFIG_MXC_EPDC */
+ 
+-#endif                         /* __MX6QSABRESD_CONFIG_H */
++#if defined(CONFIG_ENV_IS_IN_SPI_FLASH)
++#undef CONFIG_ENV_OFFSET
++#define CONFIG_ENV_OFFSET              (448 * 1024)
++#undef CONFIG_ENV_SECT_SIZE
++#define CONFIG_ENV_SECT_SIZE           (64 * 1024)
++#define CONFIG_INTERNAL_SPI_NOR_PARTITION "mtdparts=spi0.0:512k(uboot),64k(dtb),6m(linux),-(rootfs) "
++#undef CONFIG_MFG_ENV_SETTINGS
++#define CONFIG_MFG_ENV_SETTINGS \
++	"mfgtool_args=setenv bootargs console=" CONFIG_CONSOLE_DEV ",115200 " \
++		"rdinit=/linuxrc " \
++		"g_mass_storage.stall=0 g_mass_storage.removable=1 " \
++		"g_mass_storage.idVendor=0x066F g_mass_storage.idProduct=0x37FF "\
++		"g_mass_storage.iSerialNumber=\"\" "\
++		"enable_wait_mode=off "\
++		CONFIG_INTERNAL_SPI_NOR_PARTITION \
++		CONFIG_MFG_NAND_PARTITION \
++		"\0" \
++		"initrd_addr=0x12C00000\0" \
++		"initrd_high=0xffffffff\0" \
++		"bootcmd_mfg=run mfgtool_args;bootz ${loadaddr} ${initrd_addr} ${fdt_addr};\0" 
++
++#undef CONFIG_EXTRA_ENV_SETTINGS 
++#define CONFIG_EXTRA_ENV_SETTINGS \
++	CONFIG_MFG_ENV_SETTINGS \
++	"epdc_waveform=epdc_splash.bin\0" \
++	"script=boot.scr\0" \
++	"image=zImage\0" \
++	"fdt_file=" CONFIG_DEFAULT_FDT_FILE "\0" \
++	"fdt_addr=0x18000000\0" \
++	"boot_fdt=try\0" \
++	"ip_dyn=yes\0" \
++	"console=" CONFIG_CONSOLE_DEV "\0" \
++	"fdt_high=0xffffffff\0"	  \
++	"initrd_high=0xffffffff\0" \
++	"mmcdev=" __stringify(CONFIG_SYS_MMC_ENV_DEV) "\0" \
++	"mmcpart=" __stringify(CONFIG_SYS_MMC_IMG_LOAD_PART) "\0" \
++	"mmcroot=" CONFIG_MMCROOT " rootwait rw\0" \
++	"dmfc=" CONFIG_DMFC "\0" \
++	"mmcautodetect=yes\0" \
++	"update_sd_firmware=" \
++		"if test ${ip_dyn} = yes; then " \
++			"setenv get_cmd dhcp; " \
++		"else " \
++			"setenv get_cmd tftp; " \
++		"fi; " \
++		"if mmc dev ${mmcdev}; then "	\
++			"if ${get_cmd} ${update_sd_firmware_filename}; then " \
++				"setexpr fw_sz ${filesize} / 0x200; " \
++				"setexpr fw_sz ${fw_sz} + 1; "	\
++				"mmc write ${loadaddr} 0x2 ${fw_sz}; " \
++			"fi; "	\
++		"fi\0" \
++	EMMC_ENV	  \
++	"smp=" CONFIG_SYS_NOSMP "\0"\
++	"mmcargs=setenv bootargs console=${console},${baudrate} ${smp} " \
++		"root=${mmcroot} ${dmfc} \0" \
++	"loadbootscript=" \
++		"fatload mmc ${mmcdev}:${mmcpart} ${loadaddr} ${script};\0" \
++	"bootscript=echo Running bootscript from mmc ...; " \
++		"source\0" \
++	"loadimage=fatload mmc ${mmcdev}:${mmcpart} ${loadaddr} ${image}\0" \
++	"loadfdt=fatload mmc ${mmcdev}:${mmcpart} ${fdt_addr} ${fdt_file}\0" \
++	"mmcboot=echo Booting from mmc ...; " \
++		"run mmcargs; " \
++		"if test ${boot_fdt} = yes || test ${boot_fdt} = try; then " \
++			"if run loadfdt; then " \
++				"bootz ${loadaddr} - ${fdt_addr}; " \
++			"else " \
++				"if test ${boot_fdt} = try; then " \
++					"bootz; " \
++				"else " \
++					"echo WARN: Cannot load the DT; " \
++				"fi; " \
++			"fi; " \
++		"else " \
++			"bootz; " \
++		"fi;\0" \
++	"netargs=setenv bootargs console=${console},${baudrate} ${smp} " \
++		"root=/dev/nfs " \
++		"ip=dhcp nfsroot=${serverip}:${nfsroot},v3,tcp\0" \
++	"netboot=echo Booting from net ...; " \
++		"run netargs; " \
++		"if test ${ip_dyn} = yes; then " \
++			"setenv get_cmd dhcp; " \
++		"else " \
++			"setenv get_cmd tftp; " \
++		"fi; " \
++		"${get_cmd} ${image}; " \
++		"if test ${boot_fdt} = yes || test ${boot_fdt} = try; then " \
++			"if ${get_cmd} ${fdt_addr} ${fdt_file}; then " \
++				"bootz ${loadaddr} - ${fdt_addr}; " \
++			"else " \
++				"if test ${boot_fdt} = try; then " \
++					"bootz; " \
++				"else " \
++					"echo WARN: Cannot load the DT; " \
++				"fi; " \
++			"fi; " \
++		"else " \
++			"bootz; " \
++		"fi;\0" \
++	"spinorargs=setenv bootargs console=${console},${baudrate} root=/dev/mtdblock3 rootwait rw " \
++		 CONFIG_INTERNAL_SPI_NOR_PARTITION "\0" \
++	"spinorboot=echo Booting from internal SPI-NOR Flash...; " \
++		"run spinorargs; sf probe; sf read 0x12000000 0x90000 0x600000; " \
++		"sf read 0x18000000 0x80000 0x10000; bootz 0x12000000 - 0x18000000"
++
++#undef CONFIG_BOOTCOMMAND
++#define CONFIG_BOOTCOMMAND \
++	"run spinorboot; " \
++	"mmc dev ${mmcdev};" \
++	"if mmc rescan; then " \
++		"if run loadbootscript; then " \
++		"run bootscript; " \
++		"else " \
++			"if run loadimage; then " \
++				"run mmcboot; " \
++			"else run netboot; " \
++			"fi; " \
++		"fi; " \
++	"else run netboot; fi"
++
++#endif
++#endif                         /* __MX6SCMQSB_CONFIG_H */
+-- 
+1.9.1
+

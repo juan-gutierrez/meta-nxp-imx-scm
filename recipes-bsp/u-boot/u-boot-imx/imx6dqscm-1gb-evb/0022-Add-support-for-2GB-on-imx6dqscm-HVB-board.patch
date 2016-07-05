@@ -1,0 +1,51 @@
+From 2a5553b71a85b44dc86f45334f21e8887a5f62ce Mon Sep 17 00:00:00 2001
+From: Alejandro Sierra <b18039@freescale.com>
+Date: Tue, 5 Apr 2016 10:34:08 -0500
+Subject: [PATCH 22/23] Add support for 2GB on imx6dqscm HVB board
+
+Add support for 2GB on imx6dqscm HVB board
+
+Signed-off-by: Alejandro Sierra <b18039@freescale.com>
+---
+ configs/mx6dqscm_1gb_interleaving_hvb_defconfig | 2 +-
+ configs/mx6dqscm_2gb_fix_hvb_defconfig          | 5 +++++
+ configs/mx6dqscm_2gb_interleaving_hvb_defconfig | 5 +++++
+ 3 files changed, 11 insertions(+), 1 deletion(-)
+ create mode 100644 configs/mx6dqscm_2gb_fix_hvb_defconfig
+ create mode 100644 configs/mx6dqscm_2gb_interleaving_hvb_defconfig
+
+diff --git a/configs/mx6dqscm_1gb_interleaving_hvb_defconfig b/configs/mx6dqscm_1gb_interleaving_hvb_defconfig
+index be56cd1..4e525f4 100644
+--- a/configs/mx6dqscm_1gb_interleaving_hvb_defconfig
++++ b/configs/mx6dqscm_1gb_interleaving_hvb_defconfig
+@@ -1,4 +1,4 @@
+-CONFIG_SYS_EXTRA_OPTIONS="IMX_CONFIG=board/freescale/mx6dqscmqwks/imximage_scm_lpddr2.cfg,MX6Q,DDR_MB=1024,SYS_USE_SPINOR,DEFAULT_FDT_FILE=\"imx6dqscm-1gb-hvb-fix-ldo.dtb\",INTERLEAVING_MODE,SCMHVB"
++CONFIG_SYS_EXTRA_OPTIONS="IMX_CONFIG=board/freescale/mx6dqscmqwks/imximage_scm_lpddr2.cfg,MX6Q,DDR_MB=1024,SYS_USE_SPINOR,DEFAULT_FDT_FILE=\"imx6dqscm-1gb-hvb-interleave-ldo.dtb\",INTERLEAVING_MODE,SCMHVB"
+ CONFIG_ARM=y
+ CONFIG_TARGET_MX6DQSCMQWKS=y
+ CONFIG_DM=y
+diff --git a/configs/mx6dqscm_2gb_fix_hvb_defconfig b/configs/mx6dqscm_2gb_fix_hvb_defconfig
+new file mode 100644
+index 0000000..f5e7cac
+--- /dev/null
++++ b/configs/mx6dqscm_2gb_fix_hvb_defconfig
+@@ -0,0 +1,5 @@
++CONFIG_SYS_EXTRA_OPTIONS="IMX_CONFIG=board/freescale/mx6dqscmqwks/imximage_scm_lpddr2.cfg,MX6Q,DDR_MB=2048,SYS_USE_SPINOR,DEFAULT_FDT_FILE=\"imx6dqscm-1gb-hvb-fix-ldo.dtb\",SCMHVB,SCM_LPDDR2_2GB"
++CONFIG_ARM=y
++CONFIG_TARGET_MX6DQSCMQWKS=y
++CONFIG_DM=y
++CONFIG_DM_THERMAL=y
+diff --git a/configs/mx6dqscm_2gb_interleaving_hvb_defconfig b/configs/mx6dqscm_2gb_interleaving_hvb_defconfig
+new file mode 100644
+index 0000000..e3519dd
+--- /dev/null
++++ b/configs/mx6dqscm_2gb_interleaving_hvb_defconfig
+@@ -0,0 +1,5 @@
++CONFIG_SYS_EXTRA_OPTIONS="IMX_CONFIG=board/freescale/mx6dqscmqwks/imximage_scm_lpddr2.cfg,MX6Q,DDR_MB=2048,SYS_USE_SPINOR,DEFAULT_FDT_FILE=\"imx6dqscm-1gb-hvb-interleave-ldo.dtb\",INTERLEAVING_MODE,SCMHVB,SCM_LPDDR2_2GB"
++CONFIG_ARM=y
++CONFIG_TARGET_MX6DQSCMQWKS=y
++CONFIG_DM=y
++CONFIG_DM_THERMAL=y
+-- 
+1.9.1
+

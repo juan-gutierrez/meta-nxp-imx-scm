@@ -1,0 +1,107 @@
+From b7d42285e0b67b14925f123e5a0f9847fd29c48c Mon Sep 17 00:00:00 2001
+From: Alejandro Sierra <b18039@freescale.com>
+Date: Wed, 17 Feb 2016 13:03:01 -0600
+Subject: [PATCH 20/21] Add Android config files for imx6dqscm platforms
+
+Config files for Android support added on the following imx6dqscm platforms:
+    - imx6dqscm EVB board
+    - imx6dqscm QWKS Rev1.0 board
+    - imx6dqscm QWKS Rev2.0 board
+
+Signed-off-by: Alejandro Sierra <b18039@freescale.com>
+---
+ configs/mx6dqscm_1gb_fix_evb_android_defconfig                | 7 +++++++
+ configs/mx6dqscm_1gb_fix_qwks_rev1_android_defconfig          | 7 +++++++
+ configs/mx6dqscm_1gb_fix_qwks_rev2_android_defconfig          | 7 +++++++
+ configs/mx6dqscm_1gb_interleaving_evb_android_defconfig       | 7 +++++++
+ configs/mx6dqscm_1gb_interleaving_qwks_rev1_android_defconfig | 7 +++++++
+ configs/mx6dqscm_1gb_interleaving_qwks_rev2_android_defconfig | 7 +++++++
+ 6 files changed, 42 insertions(+)
+ create mode 100644 configs/mx6dqscm_1gb_fix_evb_android_defconfig
+ create mode 100644 configs/mx6dqscm_1gb_fix_qwks_rev1_android_defconfig
+ create mode 100644 configs/mx6dqscm_1gb_fix_qwks_rev2_android_defconfig
+ create mode 100644 configs/mx6dqscm_1gb_interleaving_evb_android_defconfig
+ create mode 100644 configs/mx6dqscm_1gb_interleaving_qwks_rev1_android_defconfig
+ create mode 100644 configs/mx6dqscm_1gb_interleaving_qwks_rev2_android_defconfig
+
+diff --git a/configs/mx6dqscm_1gb_fix_evb_android_defconfig b/configs/mx6dqscm_1gb_fix_evb_android_defconfig
+new file mode 100644
+index 0000000..e615a7b
+--- /dev/null
++++ b/configs/mx6dqscm_1gb_fix_evb_android_defconfig
+@@ -0,0 +1,7 @@
++CONFIG_SYS_EXTRA_OPTIONS="IMX_CONFIG=board/freescale/mx6dqscmqwks/imximage_scm_lpddr2.cfg,MX6Q,DDR_MB=1024,SYS_USE_SPINOR,DEFAULT_FDT_FILE=\"imx6dqscm-1gb-evb-fix-ldo.dtb\",SCMEVB,ANDROID_SUPPORT"
++CONFIG_ARM=y
++CONFIG_TARGET_MX6DQSCMQWKS=y
++CONFIG_SYS_MALLOC_F=y
++CONFIG_SYS_MALLOC_F_LEN=0x400
++CONFIG_DM=y
++CONFIG_DM_THERMAL=y
+diff --git a/configs/mx6dqscm_1gb_fix_qwks_rev1_android_defconfig b/configs/mx6dqscm_1gb_fix_qwks_rev1_android_defconfig
+new file mode 100644
+index 0000000..1816771
+--- /dev/null
++++ b/configs/mx6dqscm_1gb_fix_qwks_rev1_android_defconfig
+@@ -0,0 +1,7 @@
++CONFIG_SYS_EXTRA_OPTIONS="IMX_CONFIG=board/freescale/mx6dqscmqwks/imximage_scm_lpddr2.cfg,MX6Q,DDR_MB=1024,SYS_USE_SPINOR,DEFAULT_FDT_FILE=\"imx6dqscm-1gb-qwks-rev1-fix-ldo.dtb\",ANDROID_SUPPORT"
++CONFIG_ARM=y
++CONFIG_TARGET_MX6DQSCMQWKS=y
++CONFIG_SYS_MALLOC_F=y
++CONFIG_SYS_MALLOC_F_LEN=0x400
++CONFIG_DM=y
++CONFIG_DM_THERMAL=y
+diff --git a/configs/mx6dqscm_1gb_fix_qwks_rev2_android_defconfig b/configs/mx6dqscm_1gb_fix_qwks_rev2_android_defconfig
+new file mode 100644
+index 0000000..f5cfef7
+--- /dev/null
++++ b/configs/mx6dqscm_1gb_fix_qwks_rev2_android_defconfig
+@@ -0,0 +1,7 @@
++CONFIG_SYS_EXTRA_OPTIONS="IMX_CONFIG=board/freescale/mx6dqscmqwks/imximage_scm_lpddr2.cfg,MX6Q,DDR_MB=1024,SYS_USE_SPINOR,DEFAULT_FDT_FILE=\"imx6dqscm-1gb-qwks-rev2-fix-ldo.dtb\",ANDROID_SUPPORT"
++CONFIG_ARM=y
++CONFIG_TARGET_MX6DQSCMQWKS=y
++CONFIG_SYS_MALLOC_F=y
++CONFIG_SYS_MALLOC_F_LEN=0x400
++CONFIG_DM=y
++CONFIG_DM_THERMAL=y
+diff --git a/configs/mx6dqscm_1gb_interleaving_evb_android_defconfig b/configs/mx6dqscm_1gb_interleaving_evb_android_defconfig
+new file mode 100644
+index 0000000..207c7af
+--- /dev/null
++++ b/configs/mx6dqscm_1gb_interleaving_evb_android_defconfig
+@@ -0,0 +1,7 @@
++CONFIG_SYS_EXTRA_OPTIONS="IMX_CONFIG=board/freescale/mx6dqscmqwks/imximage_scm_lpddr2.cfg,MX6Q,DDR_MB=1024,SYS_USE_SPINOR,DEFAULT_FDT_FILE=\"imx6dqscm-1gb-evb-interleave-ldo.dtb\",INTERLEAVING_MODE,SCMEVB,ANDROID_SUPPORT"
++CONFIG_ARM=y
++CONFIG_TARGET_MX6DQSCMQWKS=y
++CONFIG_SYS_MALLOC_F=y
++CONFIG_SYS_MALLOC_F_LEN=0x400
++CONFIG_DM=y
++CONFIG_DM_THERMAL=y
+diff --git a/configs/mx6dqscm_1gb_interleaving_qwks_rev1_android_defconfig b/configs/mx6dqscm_1gb_interleaving_qwks_rev1_android_defconfig
+new file mode 100644
+index 0000000..d46b3f2
+--- /dev/null
++++ b/configs/mx6dqscm_1gb_interleaving_qwks_rev1_android_defconfig
+@@ -0,0 +1,7 @@
++CONFIG_SYS_EXTRA_OPTIONS="IMX_CONFIG=board/freescale/mx6dqscmqwks/imximage_scm_lpddr2.cfg,MX6Q,DDR_MB=1024,SYS_USE_SPINOR,DEFAULT_FDT_FILE=\"imx6dqscm-1gb-qwks-rev1-interleave-ldo.dtb\",INTERLEAVING_MODE,ANDROID_SUPPORT"
++CONFIG_ARM=y
++CONFIG_TARGET_MX6DQSCMQWKS=y
++CONFIG_SYS_MALLOC_F=y
++CONFIG_SYS_MALLOC_F_LEN=0x400
++CONFIG_DM=y
++CONFIG_DM_THERMAL=y
+diff --git a/configs/mx6dqscm_1gb_interleaving_qwks_rev2_android_defconfig b/configs/mx6dqscm_1gb_interleaving_qwks_rev2_android_defconfig
+new file mode 100644
+index 0000000..731c80f
+--- /dev/null
++++ b/configs/mx6dqscm_1gb_interleaving_qwks_rev2_android_defconfig
+@@ -0,0 +1,7 @@
++CONFIG_SYS_EXTRA_OPTIONS="IMX_CONFIG=board/freescale/mx6dqscmqwks/imximage_scm_lpddr2.cfg,MX6Q,DDR_MB=1024,SYS_USE_SPINOR,DEFAULT_FDT_FILE=\"imx6dqscm-1gb-qwks-rev2-interleave-ldo.dtb\",INTERLEAVING_MODE,ANDROID_SUPPORT"
++CONFIG_ARM=y
++CONFIG_TARGET_MX6DQSCMQWKS=y
++CONFIG_SYS_MALLOC_F=y
++CONFIG_SYS_MALLOC_F_LEN=0x400
++CONFIG_DM=y
++CONFIG_DM_THERMAL=y
+-- 
+1.9.1
+

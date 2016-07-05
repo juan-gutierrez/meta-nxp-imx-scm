@@ -1,0 +1,50 @@
+From ae8be5e3e278d10e00acb12265f273b8a018a649 Mon Sep 17 00:00:00 2001
+From: Alejandro Sierra <b18039@freescale.com>
+Date: Tue, 8 Mar 2016 18:27:32 -0600
+Subject: [PATCH 33/37] ARM: dtb: Add uart2 support for BT bcm module
+
+ARM: dtb: Add uart2 support for BT bcm module
+
+Signed-off-by: Alejandro Sierra <b18039@freescale.com>
+---
+ arch/arm/boot/dts/imx6dqscm-qwks-rev1-wifi.dtsi | 21 +++++++++++++++++++++
+ 1 file changed, 21 insertions(+)
+
+diff --git a/arch/arm/boot/dts/imx6dqscm-qwks-rev1-wifi.dtsi b/arch/arm/boot/dts/imx6dqscm-qwks-rev1-wifi.dtsi
+index 6e6f021..6d40e11 100644
+--- a/arch/arm/boot/dts/imx6dqscm-qwks-rev1-wifi.dtsi
++++ b/arch/arm/boot/dts/imx6dqscm-qwks-rev1-wifi.dtsi
+@@ -45,9 +45,30 @@
+ 				MX6QDL_PAD_DISP0_DAT9__GPIO4_IO30	0x13069
+ 			>;
+ 		};
++		pinctrl_uart2: uart2grp {
++			fsl,pins = <
++				MX6QDL_PAD_EIM_D26__UART2_TX_DATA	0x1b0b1
++				MX6QDL_PAD_EIM_D27__UART2_RX_DATA	0x1b0b1
++				MX6QDL_PAD_EIM_D28__UART2_CTS_B         0x1b0b1
++				MX6QDL_PAD_EIM_D29__UART2_RTS_B		0x1b0b1
++				MX6QDL_PAD_ENET_REF_CLK__GPIO1_IO23 	0x13069
++			>;
++		};
++
+ 	};
+ };
+ 
++&uart2 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_uart2>;
++	fsl,uart-has-rtscts;
++	status = "okay";
++	/* for DTE mode, add below change */
++	/* fsl,dte-mode; */
++	/*pinctrl-0 = <&pinctrl_uart2dte>; */
++};
++
++
+ &usdhc2 {
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&pinctrl_wifi>;
+-- 
+1.9.1
+

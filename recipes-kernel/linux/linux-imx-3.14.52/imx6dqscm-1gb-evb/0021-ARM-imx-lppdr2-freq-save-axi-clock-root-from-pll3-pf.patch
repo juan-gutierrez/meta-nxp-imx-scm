@@ -1,0 +1,49 @@
+From 61b5baeb204975b5abec21a861f07e6fccf01684 Mon Sep 17 00:00:00 2001
+From: Adrian Alonso <adrian.alonso@nxp.com>
+Date: Fri, 15 Jan 2016 18:42:54 -0600
+Subject: [PATCH 21/37] ARM: imx: lppdr2 freq save axi clock root from
+ pll3-pfd0
+
+* Seve/restore axi clock root from pll3-pfd0
+
+Signed-off-by: Adrian Alonso <adrian.alonso@nxp.com>
+---
+ arch/arm/mach-imx/lpddr2_freq_imx6q.S | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
+
+diff --git a/arch/arm/mach-imx/lpddr2_freq_imx6q.S b/arch/arm/mach-imx/lpddr2_freq_imx6q.S
+index a287a9f..2f25313 100644
+--- a/arch/arm/mach-imx/lpddr2_freq_imx6q.S
++++ b/arch/arm/mach-imx/lpddr2_freq_imx6q.S
+@@ -55,7 +55,7 @@ periph_clk_switch5:
+ 
+ set_ahb_podf_before_switch1:
+ 	/*
+-	 * set the MMDC_DIV=1, AXI_DIV = 2, AHB_DIV=4,
++	 * set the MMDC_DIV=1, AXI_DIV=3, AHB_DIV=3,
+ 	 */
+ 	ldr	r9, [r2, #CCM_CBCDR]
+ 	ldr	r6, =0x3f1f00
+@@ -79,7 +79,8 @@ switch_pre_periph_clk_400:
+ 
+ 	/* now switch periph_clk back. */
+ 	ldr	r9, [r2, #CCM_CBCDR]
+-	bic	r9, r9, #(1 << 25)
++	bic	r9, r9, #(1 << 25) 		/* switch periph_clk_sel to pll2 source */
++	orr r9, r9, #(1 << 6) 		/* switch axi_sel to axi_alt_sel */
+ 	str	r9, [r2, #CCM_CBCDR]
+ 
+ periph_clk_switch6:
+@@ -108,7 +109,8 @@ periph_clk_switch6:
+ 
+ 	/* now switch periph_clk to 24MHz. */
+ 	ldr	r9, [r2, #CCM_CBCDR]
+-	orr	r9, r9, #(1 << 25)
++	orr	r9, r9, #(1 << 25) 		/* switch periph_clk_sel to 24MHz */
++	bic r9, r9, #(1 << 6) 		/* switch axi_sel to peiph_clk */
+ 	str	r9, [r2, #CCM_CBCDR]
+ 
+ periph_clk_switch1:
+-- 
+1.9.1
+

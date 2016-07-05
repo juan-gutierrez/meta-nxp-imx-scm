@@ -1,0 +1,66 @@
+From dc67a9e8320deb3fde188782cdf73e8f802cacde Mon Sep 17 00:00:00 2001
+From: Alejandro Sierra <b18039@freescale.com>
+Date: Wed, 20 Jan 2016 13:57:37 -0600
+Subject: [PATCH 26/37] ARM: dts: change clock parent for ldb-di interface
+
+Change clock parent for ldb-di0 and ldb-di1 interfaces.
+Move from IMX6QDL_CLK_PLL2_PFD0_352M to IMX6QDL_CLK_MMDC_CH1_AXI.
+The reason was because of the clock re-configuration made to improve performance
+on IPU, GPU and VPU interfaces.
+
+Signed-off-by: Alejandro Sierra <b18039@freescale.com>
+---
+ arch/arm/boot/dts/imx6dqscm-1gb-evb-interleave-ldo.dts | 5 +++++
+ arch/arm/boot/dts/imx6dqscm-qwks-rev1.dtsi             | 4 ++--
+ arch/arm/boot/dts/imx6dqscm-qwks-rev2.dtsi             | 4 ++--
+ 3 files changed, 9 insertions(+), 4 deletions(-)
+
+diff --git a/arch/arm/boot/dts/imx6dqscm-1gb-evb-interleave-ldo.dts b/arch/arm/boot/dts/imx6dqscm-1gb-evb-interleave-ldo.dts
+index 2635286..ee85d10 100644
+--- a/arch/arm/boot/dts/imx6dqscm-1gb-evb-interleave-ldo.dts
++++ b/arch/arm/boot/dts/imx6dqscm-1gb-evb-interleave-ldo.dts
+@@ -33,6 +33,11 @@
+ 	};
+ };
+ 
++&clks {
++        fsl,ldb-di0-parent = <&clks IMX6QDL_CLK_MMDC_CH1_AXI>;
++        fsl,ldb-di1-parent = <&clks IMX6QDL_CLK_MMDC_CH1_AXI>;
++};
++
+ &i2c1 {
+ 	ov564x: ov564x@3c {
+ 		DOVDD-supply = <&sw4_reg>; /* 1.8v */
+diff --git a/arch/arm/boot/dts/imx6dqscm-qwks-rev1.dtsi b/arch/arm/boot/dts/imx6dqscm-qwks-rev1.dtsi
+index 2cf3fdb..7d35b65 100644
+--- a/arch/arm/boot/dts/imx6dqscm-qwks-rev1.dtsi
++++ b/arch/arm/boot/dts/imx6dqscm-qwks-rev1.dtsi
+@@ -121,8 +121,8 @@
+ };
+ 
+ &clks {
+-	fsl,ldb-di0-parent = <&clks IMX6QDL_CLK_PLL2_PFD0_352M>;
+-	fsl,ldb-di1-parent = <&clks IMX6QDL_CLK_PLL2_PFD0_352M>;
++        fsl,ldb-di0-parent = <&clks IMX6QDL_CLK_MMDC_CH1_AXI>;
++        fsl,ldb-di1-parent = <&clks IMX6QDL_CLK_MMDC_CH1_AXI>;
+ };
+ 
+ &ecspi1 {
+diff --git a/arch/arm/boot/dts/imx6dqscm-qwks-rev2.dtsi b/arch/arm/boot/dts/imx6dqscm-qwks-rev2.dtsi
+index 09ae114..f5c2393 100644
+--- a/arch/arm/boot/dts/imx6dqscm-qwks-rev2.dtsi
++++ b/arch/arm/boot/dts/imx6dqscm-qwks-rev2.dtsi
+@@ -134,8 +134,8 @@
+ };
+ 
+ &clks {
+-	fsl,ldb-di0-parent = <&clks IMX6QDL_CLK_PLL2_PFD0_352M>;
+-	fsl,ldb-di1-parent = <&clks IMX6QDL_CLK_PLL2_PFD0_352M>;
++        fsl,ldb-di0-parent = <&clks IMX6QDL_CLK_MMDC_CH1_AXI>;
++        fsl,ldb-di1-parent = <&clks IMX6QDL_CLK_MMDC_CH1_AXI>;
+ };
+ 
+ &ecspi1 {
+-- 
+1.9.1
+

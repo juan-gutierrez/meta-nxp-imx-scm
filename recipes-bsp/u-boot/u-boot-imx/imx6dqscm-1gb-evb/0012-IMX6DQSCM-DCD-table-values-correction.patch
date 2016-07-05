@@ -1,0 +1,38 @@
+From 49cedabf67ad91ffba0fa0183c914178245742c3 Mon Sep 17 00:00:00 2001
+From: Alejandro Sierra <b18039@freescale.com>
+Date: Mon, 18 Jan 2016 18:32:42 -0600
+Subject: [PATCH 12/21] IMX6DQSCM DCD table values correction
+
+CS0_END and CS1_END values were wrong for 2GB fix mode
+configuration on IMX6DQSCM DCD table.
+
+Signed-off-by: Alejandro Sierra <b18039@freescale.com>
+---
+ board/freescale/mx6dqscmqwks/imximage_scm_lpddr2.cfg | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/board/freescale/mx6dqscmqwks/imximage_scm_lpddr2.cfg b/board/freescale/mx6dqscmqwks/imximage_scm_lpddr2.cfg
+index 33ae79d..0c3acad 100644
+--- a/board/freescale/mx6dqscmqwks/imximage_scm_lpddr2.cfg
++++ b/board/freescale/mx6dqscmqwks/imximage_scm_lpddr2.cfg
+@@ -158,7 +158,7 @@ DATA 4, 0x021b0038, 0x00190778
+ #ifdef CONFIG_INTERLEAVING_MODE
+ DATA 4, 0x021b0040, 0x00000063
+ #else
+-DATA 4, 0x021b0040, 0x0000004f
++DATA 4, 0x021b0040, 0x0000005f
+ #endif
+ 
+ DATA 4, 0x021b0400, 0x11420000
+@@ -185,7 +185,7 @@ DATA 4, 0x021b4038, 0x00190778
+ #ifdef CONFIG_INTERLEAVING_MODE
+ DATA 4, 0x021b4040, 0x00000023
+ #else
+-DATA 4, 0x021b4040, 0x00000017
++DATA 4, 0x021b4040, 0x00000027
+ #endif
+ 
+ DATA 4, 0x021b4400, 0x11420000
+-- 
+1.9.1
+

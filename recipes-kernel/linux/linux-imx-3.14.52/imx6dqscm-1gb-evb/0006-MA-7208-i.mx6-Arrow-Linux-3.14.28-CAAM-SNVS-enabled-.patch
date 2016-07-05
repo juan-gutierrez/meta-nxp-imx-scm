@@ -1,0 +1,150 @@
+From 7b241e9d58caf80a66adf4827301ff9c3f206c9a Mon Sep 17 00:00:00 2001
+From: Adrian Alonso <aalonso@freescale.com>
+Date: Wed, 2 Dec 2015 07:40:36 -0600
+Subject: [PATCH 06/37] MA-7208 [i.mx6/Arrow] Linux 3.14.28 CAAM & SNVS enabled
+ by default.
+
+JTAG, DS-5 attachment causes exceptions
+Added properties to device tree, in order to enable and disable alarms.
+The following are the available alarms:
+-JTAG active
+-WatchDOG 2 reset
+-Internal Boot
+-External Tamper Detection pad
+
+Signed-off-by: Ulises Cardenas <ulises.cardenas@freescale.com>
+---
+ arch/arm/boot/dts/imx6qdl.dtsi |  4 ++++
+ arch/arm/boot/dts/imx6sx.dtsi  |  4 ++++
+ arch/arm/boot/dts/imx6ul.dtsi  |  4 ++++
+ arch/arm/boot/dts/imx7d.dtsi   |  4 ++++
+ drivers/crypto/caam/secvio.c   | 38 +++++++++++++++++++++++++++++---------
+ 5 files changed, 45 insertions(+), 9 deletions(-)
+
+diff --git a/arch/arm/boot/dts/imx6qdl.dtsi b/arch/arm/boot/dts/imx6qdl.dtsi
+index 255288e..e7de1ce 100644
+--- a/arch/arm/boot/dts/imx6qdl.dtsi
++++ b/arch/arm/boot/dts/imx6qdl.dtsi
+@@ -742,6 +742,10 @@
+ 			caam_snvs: caam-snvs@020cc000 {
+ 				compatible = "fsl,imx6q-caam-snvs";
+ 				reg = <0x020cc000 0x4000>;
++				jtag-active-alarm = "enabled";
++				watchdog-reset-alarm = "enabled";
++				internal-boot-alarm = "enabled";
++				external-tamper-alarm = "disabled";
+ 			};
+ 
+ 			snvs@020cc000 {
+diff --git a/arch/arm/boot/dts/imx6sx.dtsi b/arch/arm/boot/dts/imx6sx.dtsi
+index bb14f9c..b1b3b7f 100644
+--- a/arch/arm/boot/dts/imx6sx.dtsi
++++ b/arch/arm/boot/dts/imx6sx.dtsi
+@@ -774,6 +774,10 @@
+ 			caam_snvs: caam-snvs@020cc000 {
+ 				compatible = "fsl,imx6q-caam-snvs";
+ 				reg = <0x020cc000 0x4000>;
++				jtag-active-alarm = "enabled";
++				watchdog-reset-alarm = "enabled";
++				internal-boot-alarm = "enabled";
++				external-tamper-alarm = "disabled";
+ 			};
+ 
+ 			snvs: snvs@020cc000 {
+diff --git a/arch/arm/boot/dts/imx6ul.dtsi b/arch/arm/boot/dts/imx6ul.dtsi
+index 72fb004..cfdeaea 100644
+--- a/arch/arm/boot/dts/imx6ul.dtsi
++++ b/arch/arm/boot/dts/imx6ul.dtsi
+@@ -665,6 +665,10 @@
+ 			caam_snvs: caam-snvs@020cc000 {
+ 				compatible = "fsl,imx6q-caam-snvs";
+ 				reg = <0x020cc000 0x4000>;
++				jtag-active-alarm = "enabled";
++				watchdog-reset-alarm = "enabled";
++				internal-boot-alarm = "enabled";
++				external-tamper-alarm = "disabled";
+ 			};
+ 
+ 			snvs: snvs@020cc000 {
+diff --git a/arch/arm/boot/dts/imx7d.dtsi b/arch/arm/boot/dts/imx7d.dtsi
+index b71612c..eb44762 100644
+--- a/arch/arm/boot/dts/imx7d.dtsi
++++ b/arch/arm/boot/dts/imx7d.dtsi
+@@ -641,6 +641,10 @@
+ 				reg = <0x30370000 0x10000>;
+ 				clocks = <&clks IMX7D_SNVS_ROOT_CLK>;
+ 				clock-names = "snvs";
++				jtag-active-alarm = "enabled";
++				watchdog-reset-alarm = "enabled";
++				internal-boot-alarm = "enabled";
++				external-tamper-alarm = "disabled";
+ 			};
+ 
+ 			snvs: snvs@30370000 {
+diff --git a/drivers/crypto/caam/secvio.c b/drivers/crypto/caam/secvio.c
+index ea054b2..2ab59f2 100644
+--- a/drivers/crypto/caam/secvio.c
++++ b/drivers/crypto/caam/secvio.c
+@@ -204,7 +204,9 @@ static int snvs_secvio_probe(struct platform_device *pdev)
+ 	struct device_node *np, *npirq;
+ 	struct snvs_full __iomem *snvsregs;
+ 	int i, error;
++	void *jtd, *wtd, *itd, *etd;
+ 	u32 hpstate;
++	u32 initstate;
+ 
+ 	svpriv = kzalloc(sizeof(struct snvs_secvio_drv_private), GFP_KERNEL);
+ 	if (!svpriv)
+@@ -215,6 +217,31 @@ static int snvs_secvio_probe(struct platform_device *pdev)
+ 	svpriv->pdev = pdev;
+ 	np = pdev->dev.of_node;
+ 
++	jtd = of_get_property(pdev->dev.of_node, "jtag-tamper-det", NULL);
++	wtd = of_get_property(pdev->dev.of_node, "watchdog-tamper-det", NULL);
++	itd = of_get_property(pdev->dev.of_node, "internal-tamper-det", NULL);
++	etd = of_get_property(pdev->dev.of_node, "external-tamper-det", NULL);
++	if (!jtd | !wtd | !itd | !etd ) {
++		dev_err(svdev, "can't identify alarms configuration\n");
++		kfree(svpriv);
++		return -EINVAL;
++	}
++
++	/*
++	 * Configure all sources  according to device tree property.
++	 * If the property is enabled then the source is ser as
++	 * fatal violations except LP section,
++	 * source #5 (typically used as an external tamper detect), and
++	 * source #3 (typically unused). Whenever the transition to
++	 * secure mode has occurred, these will now be "fatal" violations
++	 */
++	initstate = HP_SECVIO_INTEN_SRC0;
++	initstate = (!strcmp(jtd, "enabled")) ? (initstate | HP_SECVIO_INTEN_SRC1) : initstate;
++	initstate = (!strcmp(wtd, "enabled")) ? (initstate | HP_SECVIO_INTEN_SRC2) : initstate;
++	initstate = (!strcmp(itd, "enabled")) ? (initstate | HP_SECVIO_INTEN_SRC4) : initstate;
++	initstate = (!strcmp(etd, "enabled")) ? (initstate | HP_SECVIO_INTEN_SRC5) : initstate;
++
++
+ 	npirq = of_find_compatible_node(NULL, NULL, "fsl,imx6q-caam-secvio");
+ 	if (!npirq) {
+ 		dev_err(svdev, "can't identify secvio interrupt\n");
+@@ -262,15 +289,8 @@ static int snvs_secvio_probe(struct platform_device *pdev)
+ 	}
+ 
+ 	clk_prepare_enable(svpriv->clk);
+-	/*
+-	 * Configure all sources as fatal violations except LP section,
+-	 * source #5 (typically used as an external tamper detect), and
+-	 * source #3 (typically unused). Whenever the transition to
+-	 * secure mode has occurred, these will now be "fatal" violations
+-	 */
+-	wr_reg32(&svpriv->svregs->hp.secvio_intcfg,
+-		 HP_SECVIO_INTEN_SRC4 | HP_SECVIO_INTEN_SRC2 |
+-		 HP_SECVIO_INTEN_SRC1 | HP_SECVIO_INTEN_SRC0);
++	
++	wr_reg32(&svpriv->svregs->hp.secvio_intcfg, initstate);
+ 
+ 	hpstate = (rd_reg32(&svpriv->svregs->hp.status) &
+ 			    HP_STATUS_SSM_ST_MASK) >> HP_STATUS_SSM_ST_SHIFT;
+-- 
+1.9.1
+

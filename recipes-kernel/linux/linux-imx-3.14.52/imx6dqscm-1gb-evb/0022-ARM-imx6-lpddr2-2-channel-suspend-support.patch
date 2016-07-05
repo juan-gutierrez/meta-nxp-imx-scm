@@ -1,0 +1,33 @@
+From f9905552177cbb0eee50f9a7b3f36aa14c06d795 Mon Sep 17 00:00:00 2001
+From: Adrian Alonso <adrian.alonso@nxp.com>
+Date: Wed, 6 Jan 2016 19:05:19 -0600
+Subject: [PATCH 22/37] ARM: imx6: lpddr2 2 channel suspend support
+
+Add lpddr2 channel 2 suspend support, add mmdc io pads
+save/restore offset for channel 2.
+
+Signed-off-by: Adrian Alonso <adrian.alonso@nxp.com>
+---
+ arch/arm/mach-imx/pm-imx6.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/arch/arm/mach-imx/pm-imx6.c b/arch/arm/mach-imx/pm-imx6.c
+index bc1fe35..2eab329 100644
+--- a/arch/arm/mach-imx/pm-imx6.c
++++ b/arch/arm/mach-imx/pm-imx6.c
+@@ -319,10 +319,11 @@ static const u32 imx6q_mmdc_io_offset[] __initconst = {
+ 
+ static const u32 imx6q_mmdc_io_lpddr2_offset[] __initconst = {
+ 	0x5ac, 0x5b4, 0x528, 0x520, /* DQM0 ~ DQM3 */
++	0x514, 0x510, 0x5bc, 0x5c4, /* DQM4 ~ DQM7 */
+ 	0x784, 0x788, 0x794, 0x79c, /* GPR_B0DS ~ GPR_B3DS */
++	0x7a0, 0x7a4, 0x7a8, 0x748, /* GPR_B4DS ~ GPR_B7DS */
+ 	0x56c, 0x578, 0x588, 0x594, /* CAS, RAS, SDCLK_0, SDCLK_1 */
+ 	0x59c, 0x5a0, 0x750, 0x774, /* SODT0, SODT1, MODE_CTL, MODE */
+-	0x5a8, 0x5b0, 0x524, 0x51c, /* SDQS0 ~ SDQS3 */
+ 	0x74c, 0x590, 0x598, 0x57c, /* GRP_ADDS, SDCKE0, SDCKE1, RESET */
+ };
+ 
+-- 
+1.9.1
+

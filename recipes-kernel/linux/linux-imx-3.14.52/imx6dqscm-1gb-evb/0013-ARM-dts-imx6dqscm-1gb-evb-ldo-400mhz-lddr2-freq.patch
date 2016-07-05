@@ -1,0 +1,36 @@
+From afd82362ebacba4d60aa4fe07ebf4e0d61e751e6 Mon Sep 17 00:00:00 2001
+From: Alejandro Sierra <b18039@freescale.com>
+Date: Thu, 17 Dec 2015 17:01:19 -0600
+Subject: [PATCH 13/37] ARM: dts: imx6dqscm-1gb-evb-ldo 400mhz lddr2 freq
+
+Modify max_ddr_freq to 400mhz on the busfreq device node for
+imx6dqscm boards on device tree descriptor.
+
+Signed-off-by: Alejandro Sierra <b18039@freescale.com>
+---
+ arch/arm/boot/dts/imx6dqscm-1gb-evb-ldo.dts | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
+
+diff --git a/arch/arm/boot/dts/imx6dqscm-1gb-evb-ldo.dts b/arch/arm/boot/dts/imx6dqscm-1gb-evb-ldo.dts
+index 294a8f9..540b58f 100644
+--- a/arch/arm/boot/dts/imx6dqscm-1gb-evb-ldo.dts
++++ b/arch/arm/boot/dts/imx6dqscm-1gb-evb-ldo.dts
+@@ -15,12 +15,10 @@
+ / {
+ 	model = "Freescale i.MX6D SCM EVB";
+ 	compatible = "fsl,imx6q-sabresd", "fsl,imx6q";
+-	soc {
+-		busfreq {
+-			status = "disabled";
+-		};
+-	};
++};
+ 
++&busfreq {
++        fsl,max_ddr_freq = <400000000>;
+ };
+ 
+ &ecspi1 {
+-- 
+1.9.1
+

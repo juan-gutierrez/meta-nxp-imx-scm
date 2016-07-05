@@ -1,0 +1,37 @@
+From eca6fb3dfbba0bd4cc67419772359119be974801 Mon Sep 17 00:00:00 2001
+From: Alejandro Sierra <b18039@freescale.com>
+Date: Thu, 19 Nov 2015 12:56:57 -0600
+Subject: [PATCH 05/21] Modify USDHC2 card detect (CD) GPIO pin
+
+Change Card Detect pin to GPIO_4_GPIO1_IO04 on USDHC2 port
+
+Signed-off-by: Alejandro Sierra <b18039@freescale.com>
+---
+ board/freescale/mx6scmfreeX/mx6scmfreeX.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/board/freescale/mx6scmfreeX/mx6scmfreeX.c b/board/freescale/mx6scmfreeX/mx6scmfreeX.c
+index 75d5007..9a74f38 100644
+--- a/board/freescale/mx6scmfreeX/mx6scmfreeX.c
++++ b/board/freescale/mx6scmfreeX/mx6scmfreeX.c
+@@ -155,7 +155,7 @@ static iomux_v3_cfg_t const usdhc2_pads[] = {
+ 	MX6_PAD_NANDF_D5__SD2_DATA5	| MUX_PAD_CTRL(USDHC_PAD_CTRL),
+ 	MX6_PAD_NANDF_D6__SD2_DATA6	| MUX_PAD_CTRL(USDHC_PAD_CTRL),
+ 	MX6_PAD_NANDF_D7__SD2_DATA7	| MUX_PAD_CTRL(USDHC_PAD_CTRL),
+-	MX6_PAD_NANDF_D2__GPIO2_IO02	| MUX_PAD_CTRL(NO_PAD_CTRL), /* CD */
++	MX6_PAD_GPIO_4__GPIO1_IO04	| MUX_PAD_CTRL(NO_PAD_CTRL), /* CD */
+ };
+ 
+ static iomux_v3_cfg_t const usdhc3_pads[] = {
+@@ -361,7 +361,7 @@ int mmc_map_to_kernel_blk(int dev_no)
+ 	return dev_no + 1;
+ }
+ 
+-#define USDHC2_CD_GPIO	IMX_GPIO_NR(2, 2)
++#define USDHC2_CD_GPIO	IMX_GPIO_NR(1, 4)
+ #define USDHC3_CD_GPIO	IMX_GPIO_NR(2, 0)
+ 
+ int board_mmc_getcd(struct mmc *mmc)
+-- 
+1.9.1
+

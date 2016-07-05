@@ -1,0 +1,52 @@
+From 168d8ed515a1ad6fd904e4cae4fdd83acc164671 Mon Sep 17 00:00:00 2001
+From: Juan Gutierrez <juan.gutierrez@nxp.com>
+Date: Fri, 12 Feb 2016 12:31:43 -0600
+Subject: [PATCH 17/21] configs: Add the DMFC config option to upgrade
+ performance
+
+Setting dmfc=3 option as default for mx6dqscmqwks configuration.
+This parameter is for upgrading the performance related with
+intensive performance with IPU.
+
+Signed-off-by: Juan Gutierrez <juan.gutierrez@nxp.com>
+---
+ include/configs/mx6dqscmqwks.h    | 1 +
+ include/configs/mx6sabre_common.h | 3 ++-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/include/configs/mx6dqscmqwks.h b/include/configs/mx6dqscmqwks.h
+index b76a502..3fd4ee1 100644
+--- a/include/configs/mx6dqscmqwks.h
++++ b/include/configs/mx6dqscmqwks.h
+@@ -21,6 +21,7 @@
+ #define CONFIG_MXC_UART_BASE	UART1_BASE
+ #define CONFIG_CONSOLE_DEV		"ttymxc0"
+ #define CONFIG_MMCROOT			"/dev/mmcblk2p2"  /* SDHC3 */
++#define CONFIG_DMFC				"dmfc=3"
+ #define PHYS_SDRAM_SIZE		(1u * 1024 * 1024 * 1024)
+ 
+ #include "mx6sabre_common.h"
+diff --git a/include/configs/mx6sabre_common.h b/include/configs/mx6sabre_common.h
+index 424189a..f59e8e1 100644
+--- a/include/configs/mx6sabre_common.h
++++ b/include/configs/mx6sabre_common.h
+@@ -197,6 +197,7 @@
+ 	"mmcdev=" __stringify(CONFIG_SYS_MMC_ENV_DEV) "\0" \
+ 	"mmcpart=" __stringify(CONFIG_SYS_MMC_IMG_LOAD_PART) "\0" \
+ 	"mmcroot=" CONFIG_MMCROOT " rootwait rw\0" \
++	"dmfc=" CONFIG_DMFC "\0" \
+ 	"mmcautodetect=yes\0" \
+ 	"update_sd_firmware=" \
+ 		"if test ${ip_dyn} = yes; then " \
+@@ -214,7 +215,7 @@
+ 	EMMC_ENV	  \
+ 	"smp=" CONFIG_SYS_NOSMP "\0"\
+ 	"mmcargs=setenv bootargs console=${console},${baudrate} ${smp} " \
+-		"root=${mmcroot}\0" \
++		"root=${mmcroot} ${dmfc} \0" \
+ 	"loadbootscript=" \
+ 		"fatload mmc ${mmcdev}:${mmcpart} ${loadaddr} ${script};\0" \
+ 	"bootscript=echo Running bootscript from mmc ...; " \
+-- 
+1.9.1
+

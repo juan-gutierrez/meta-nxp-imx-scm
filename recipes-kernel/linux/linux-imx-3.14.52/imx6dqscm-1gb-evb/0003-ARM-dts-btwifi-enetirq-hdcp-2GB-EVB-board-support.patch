@@ -1,0 +1,122 @@
+From 5bad87bebeefd75595c95ed9e1454b7fc2129065 Mon Sep 17 00:00:00 2001
+From: Alejandro Sierra <b18039@freescale.com>
+Date: Fri, 11 Dec 2015 09:53:45 -0600
+Subject: [PATCH 03/37] ARM:dts: btwifi,enetirq,hdcp 2GB EVB board support
+
+    Add EVB board dts files for imx6scm Single Chip Module.
+    Support for the following dtb features:
+        - imx6dqscm-2gb-evb-btwifi-ldo.dtb
+        - imx6dqscm-2gb-evb-enetirq-ldo.dtb
+        - imx6dqscm-2gb-evb-hdcp-ldo.dtb
+
+Signed-off-by: Alejandro Sierra <b18039@freescale.com>
+---
+ arch/arm/boot/dts/Makefile                          |  3 +++
+ arch/arm/boot/dts/imx6dqscm-2gb-evb-btwifi-ldo.dts  | 21 +++++++++++++++++++++
+ arch/arm/boot/dts/imx6dqscm-2gb-evb-enetirq-ldo.dts | 21 +++++++++++++++++++++
+ arch/arm/boot/dts/imx6dqscm-2gb-evb-hdcp-ldo.dts    | 21 +++++++++++++++++++++
+ 4 files changed, 66 insertions(+)
+ create mode 100644 arch/arm/boot/dts/imx6dqscm-2gb-evb-btwifi-ldo.dts
+ create mode 100644 arch/arm/boot/dts/imx6dqscm-2gb-evb-enetirq-ldo.dts
+ create mode 100644 arch/arm/boot/dts/imx6dqscm-2gb-evb-hdcp-ldo.dts
+
+diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+index 07f7c79..392dd54 100644
+--- a/arch/arm/boot/dts/Makefile
++++ b/arch/arm/boot/dts/Makefile
+@@ -245,8 +245,11 @@ dtb-$(CONFIG_ARCH_MXC) += \
+ 	imx6dqscm-1gb-evb-ldo.dtb \
+ 	imx6dqscm-2gb-evb-ldo.dtb \
+ 	imx6dqscm-1gb-evb-btwifi-ldo.dtb \
++	imx6dqscm-2gb-evb-btwifi-ldo.dtb \
+ 	imx6dqscm-1gb-evb-enetirq-ldo.dtb \
++	imx6dqscm-2gb-evb-enetirq-ldo.dtb \
+ 	imx6dqscm-1gb-evb-hdcp-ldo.dtb \
++	imx6dqscm-2gb-evb-hdcp-ldo.dtb \
+ 	vf610-twr.dtb \
+ 	imx7d-12x12-lpddr3-arm2.dtb \
+ 	imx7d-12x12-ddr3-arm2.dtb \
+diff --git a/arch/arm/boot/dts/imx6dqscm-2gb-evb-btwifi-ldo.dts b/arch/arm/boot/dts/imx6dqscm-2gb-evb-btwifi-ldo.dts
+new file mode 100644
+index 0000000..9f9ccb0
+--- /dev/null
++++ b/arch/arm/boot/dts/imx6dqscm-2gb-evb-btwifi-ldo.dts
+@@ -0,0 +1,21 @@
++/*
++ * Copyright 2012 Freescale Semiconductor, Inc.
++ * Copyright 2011 Linaro Ltd.
++ *
++ * The code contained herein is licensed under the GNU General Public
++ * License. You may obtain a copy of the GNU General Public License
++ * Version 2 or later at the following locations:
++ *
++ * http://www.opensource.org/licenses/gpl-license.html
++ * http://www.gnu.org/copyleft/gpl.html
++ */
++
++#include "imx6dqscm-1gb-evb-btwifi-ldo.dts"
++
++/ {
++	memory: memory {
++		reg = <0x10000000 0x80000000>;
++	};
++
++};
++
+diff --git a/arch/arm/boot/dts/imx6dqscm-2gb-evb-enetirq-ldo.dts b/arch/arm/boot/dts/imx6dqscm-2gb-evb-enetirq-ldo.dts
+new file mode 100644
+index 0000000..00f9fb9
+--- /dev/null
++++ b/arch/arm/boot/dts/imx6dqscm-2gb-evb-enetirq-ldo.dts
+@@ -0,0 +1,21 @@
++/*
++ * Copyright 2012 Freescale Semiconductor, Inc.
++ * Copyright 2011 Linaro Ltd.
++ *
++ * The code contained herein is licensed under the GNU General Public
++ * License. You may obtain a copy of the GNU General Public License
++ * Version 2 or later at the following locations:
++ *
++ * http://www.opensource.org/licenses/gpl-license.html
++ * http://www.gnu.org/copyleft/gpl.html
++ */
++
++#include "imx6dqscm-1gb-evb-enetirq-ldo.dts"
++
++/ {
++	memory: memory {
++		reg = <0x10000000 0x80000000>;
++	};
++
++};
++
+diff --git a/arch/arm/boot/dts/imx6dqscm-2gb-evb-hdcp-ldo.dts b/arch/arm/boot/dts/imx6dqscm-2gb-evb-hdcp-ldo.dts
+new file mode 100644
+index 0000000..70b37a3
+--- /dev/null
++++ b/arch/arm/boot/dts/imx6dqscm-2gb-evb-hdcp-ldo.dts
+@@ -0,0 +1,21 @@
++/*
++ * Copyright 2012 Freescale Semiconductor, Inc.
++ * Copyright 2011 Linaro Ltd.
++ *
++ * The code contained herein is licensed under the GNU General Public
++ * License. You may obtain a copy of the GNU General Public License
++ * Version 2 or later at the following locations:
++ *
++ * http://www.opensource.org/licenses/gpl-license.html
++ * http://www.gnu.org/copyleft/gpl.html
++ */
++
++#include "imx6dqscm-1gb-evb-hdcp-ldo.dts"
++
++/ {
++	memory: memory {
++		reg = <0x10000000 0x80000000>;
++	};
++
++};
++
+-- 
+1.9.1
+

@@ -1,0 +1,63 @@
+From 08dd5a85b5c5cd5478ac8fe59bf309e986df4002 Mon Sep 17 00:00:00 2001
+From: Juan Gutierrez <juan.gutierrez@nxp.com>
+Date: Wed, 10 Feb 2016 13:16:49 -0600
+Subject: [PATCH 16/21] scm config: Use default values for ARCR Dynamic Jump
+ parameters
+
+If   MAARCR[ARCR_DYN_JMP] = 0x0   MAARCR [ARCR_DYN_MAX] = 0x0
+
+When trying to play an particular MPEG2 video on the SCM board a
+lot of IPU Display Interface Sync Error (DI0_SYNC_DISP_ERR) are
+thrown:
+
+imx-ipuv3 2400000.ipu: IPU Warning - IPU_INT_STAT_10 = 0x0010000
+
+Using the default values for the Dynamic Jump parameters:
+
+  MAARCR[ARCR_DYN_JMP] = 0x1   MAARCR [ARCR_DYN_MAX] = 0xF
+
+the likelihood of the error decreases significantly.
+
+Signed-off-by: Juan Gutierrez <juan.gutierrez@nxp.com>
+---
+ board/freescale/mx6dqscmqwks/imximage_scm_lpddr2.cfg | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+ mode change 100644 => 100755 board/freescale/mx6dqscmqwks/imximage_scm_lpddr2.cfg
+
+diff --git a/board/freescale/mx6dqscmqwks/imximage_scm_lpddr2.cfg b/board/freescale/mx6dqscmqwks/imximage_scm_lpddr2.cfg
+old mode 100644
+new mode 100755
+index 0c3acad..77cd459
+--- a/board/freescale/mx6dqscmqwks/imximage_scm_lpddr2.cfg
++++ b/board/freescale/mx6dqscmqwks/imximage_scm_lpddr2.cfg
+@@ -376,15 +376,15 @@ DATA 4, 0x021b0040, 0x00000053
+ DATA 4, 0x021b0040, 0x0000004f
+ #endif
+ 
+-DATA 4, 0x021b0400, 0x11420000
++ //DATA 4, 0x021b0400, 0x114200F0  //MMDC0_MAARCR ADOPT optimized priorities. Dyn jump disabled
+ 
+ DATA 4, 0x021b0000, 0x83110000
+ 
+-DATA 4, 0x021b4004, 0x00020036
++
+ DATA 4, 0x021b4008, 0x00000000
+ 
+ DATA 4, 0x021b400c, 0x33374133
+-
++DATA 4, 0x021b4004, 0x00020036
+ DATA 4, 0x021b4010, 0x00100a82
+ 
+ DATA 4, 0x021b4014, 0x00000093
+@@ -403,7 +403,7 @@ DATA 4, 0x021b4040, 0x00000013
+ DATA 4, 0x021b4040, 0x00000017
+ #endif
+ 
+-DATA 4, 0x021b4400, 0x11420000
++//DATA 4, 0x021b4400, 0x11420000
+ 
+ DATA 4, 0x021b4000, 0x83110000
+ 
+-- 
+1.9.1
+

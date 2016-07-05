@@ -1,0 +1,51 @@
+From 1da24fe2966f700e3156a68aa90a17de4352ebe4 Mon Sep 17 00:00:00 2001
+From: Alejandro Sierra <b18039@freescale.com>
+Date: Fri, 12 Feb 2016 18:57:02 -0600
+Subject: [PATCH 28/37] Revert "clk-imx6: ldb clock root from
+ mmdc1_axi_clk_root"
+
+This reverts commit ebeff627c5df410ad8ec872e530125472c5152b7.
+---
+ arch/arm/mach-imx/clk-imx6q.c | 19 ++++---------------
+ 1 file changed, 4 insertions(+), 15 deletions(-)
+
+diff --git a/arch/arm/mach-imx/clk-imx6q.c b/arch/arm/mach-imx/clk-imx6q.c
+index 6b89804..bc3feec 100644
+--- a/arch/arm/mach-imx/clk-imx6q.c
++++ b/arch/arm/mach-imx/clk-imx6q.c
+@@ -808,19 +808,8 @@ static void __init imx6q_clocks_init(struct device_node *ccm_node)
+ 		imx_clk_set_parent(clk[IMX6QDL_CLK_IPU2_SEL], clk[IMX6QDL_CLK_PLL2_PFD2_396M]);
+ 		imx_clk_set_rate(clk[IMX6QDL_CLK_IPU2], 200000000);
+ 	} else if (cpu_is_imx6q()) {
+-                imx_clk_set_rate(clk[IMX6QDL_CLK_PLL3_PFD1_540M], 540000000);
+-                imx_clk_set_parent(clk[IMX6QDL_CLK_IPU1_SEL], clk[IMX6QDL_CLK_PLL3_PFD1_540M]);
+-                imx_clk_set_parent(clk[IMX6QDL_CLK_IPU2_SEL], clk[IMX6QDL_CLK_PLL3_PFD1_540M]);
+-                imx_clk_set_parent(clk[IMX6QDL_CLK_AXI_ALT_SEL], clk[IMX6QDL_CLK_PLL3_PFD1_540M]);
+-                imx_clk_set_parent(clk[IMX6QDL_CLK_AXI_SEL], clk[IMX6QDL_CLK_AXI_ALT_SEL]);
+-                imx_clk_set_parent(clk[IMX6QDL_CLK_LDB_DI0_DIV_SEL], clk[IMX6QDL_CLK_LDB_DI0_DIV_3_5]);
+-                imx_clk_set_parent(clk[IMX6QDL_CLK_LDB_DI1_DIV_SEL], clk[IMX6QDL_CLK_LDB_DI1_DIV_3_5]);
+-                imx_clk_set_parent(clk[IMX6QDL_CLK_IPU1_DI0_SEL], clk[IMX6QDL_CLK_LDB_DI0]);
+-                imx_clk_set_parent(clk[IMX6QDL_CLK_IPU1_DI1_SEL], clk[IMX6QDL_CLK_LDB_DI1]);
+-                imx_clk_set_parent(clk[IMX6QDL_CLK_IPU2_DI0_SEL], clk[IMX6QDL_CLK_LDB_DI0]);
+-                imx_clk_set_parent(clk[IMX6QDL_CLK_IPU2_DI1_SEL], clk[IMX6QDL_CLK_LDB_DI1]);
+-                /* set eim_slow to 132Mhz */
+-                imx_clk_set_rate(clk[IMX6QDL_CLK_EIM_SLOW], 132000000);
++		imx_clk_set_parent(clk[IMX6QDL_CLK_IPU1_SEL], clk[IMX6QDL_CLK_MMDC_CH0_AXI]);
++		imx_clk_set_parent(clk[IMX6QDL_CLK_IPU2_SEL], clk[IMX6QDL_CLK_MMDC_CH0_AXI]);
+ 	}
+ 
+ 	imx_clk_set_parent(clk[IMX6QDL_CLK_AXI_ALT_SEL], clk[IMX6QDL_CLK_PLL3_PFD1_540M]);
+@@ -861,8 +850,8 @@ static void __init imx6q_clocks_init(struct device_node *ccm_node)
+ 		} else {
+ 			imx_clk_set_parent(clk[IMX6QDL_CLK_GPU3D_SHADER_SEL], clk[IMX6QDL_CLK_PLL2_PFD1_594M]);
+ 			imx_clk_set_rate(clk[IMX6QDL_CLK_GPU3D_SHADER], 594000000);
+-			imx_clk_set_parent(clk[IMX6QDL_CLK_GPU3D_CORE_SEL], clk[IMX6QDL_CLK_PLL3_USB_OTG]);
+-                        imx_clk_set_rate(clk[IMX6QDL_CLK_GPU3D_CORE], 480000000);
++			imx_clk_set_parent(clk[IMX6QDL_CLK_GPU3D_CORE_SEL], clk[IMX6QDL_CLK_MMDC_CH0_AXI]);
++			imx_clk_set_rate(clk[IMX6QDL_CLK_GPU3D_CORE], 528000000);
+ 			imx_clk_set_parent(clk[IMX6QDL_CLK_GPU2D_CORE_SEL], clk[IMX6QDL_CLK_PLL3_USB_OTG]);
+ 			imx_clk_set_rate(clk[IMX6QDL_CLK_GPU2D_CORE], 480000000);
+ 		}
+-- 
+1.9.1
+

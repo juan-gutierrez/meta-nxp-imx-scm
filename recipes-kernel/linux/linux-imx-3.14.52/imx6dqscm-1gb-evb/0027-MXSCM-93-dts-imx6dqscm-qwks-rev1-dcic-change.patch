@@ -1,0 +1,28 @@
+From c132c44d7422a24c631efd68937205cc32d257b2 Mon Sep 17 00:00:00 2001
+From: Alejandro Sierra <b18039@freescale.com>
+Date: Mon, 1 Feb 2016 17:49:24 -0600
+Subject: [PATCH 27/37] MXSCM-93 dts: imx6dqscm-qwks-rev1: dcic change
+
+dcic change to LVDS0 on qwks rev1 board on dtsi.
+
+Signed-off-by: Alejandro Sierra <b18039@freescale.com>
+---
+ arch/arm/boot/dts/imx6dqscm-qwks-rev1.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/arm/boot/dts/imx6dqscm-qwks-rev1.dtsi b/arch/arm/boot/dts/imx6dqscm-qwks-rev1.dtsi
+index 7d35b65..00accc7 100644
+--- a/arch/arm/boot/dts/imx6dqscm-qwks-rev1.dtsi
++++ b/arch/arm/boot/dts/imx6dqscm-qwks-rev1.dtsi
+@@ -443,7 +443,7 @@
+ 
+ &dcic2 {
+ 	dcic_id = <1>;
+-	dcic_mux = "dcic-lvds1";
++	dcic_mux = "dcic-lvds0";
+ 	status = "okay";
+ };
+ 
+-- 
+1.9.1
+

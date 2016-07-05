@@ -1,0 +1,78 @@
+From 85ab34316bc9321ce170d3ebc8559b83dc5e0e04 Mon Sep 17 00:00:00 2001
+From: Alejandro Sierra <b18039@freescale.com>
+Date: Mon, 11 Apr 2016 18:24:28 -0500
+Subject: [PATCH 36/37] Enable 1gb and 2gb for hvb on imx6dqscm
+
+Enable 1gb and 2gb for hvb board on imx6dqscm
+
+Signed-off-by: Alejandro Sierra <b18039@freescale.com>
+---
+ arch/arm/boot/dts/Makefile                             |  2 ++
+ arch/arm/boot/dts/imx6dqscm-1gb-hvb-interleave-ldo.dts | 10 ++++++++++
+ arch/arm/boot/dts/imx6dqscm-1gb-interleave.dtsi        |  2 +-
+ arch/arm/boot/dts/imx6dqscm-2gb-hvb-interleave-ldo.dts | 10 ++++++++++
+ 4 files changed, 23 insertions(+), 1 deletion(-)
+ create mode 100755 arch/arm/boot/dts/imx6dqscm-1gb-hvb-interleave-ldo.dts
+ create mode 100755 arch/arm/boot/dts/imx6dqscm-2gb-hvb-interleave-ldo.dts
+
+diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+index 3ec3987..0b22213 100644
+--- a/arch/arm/boot/dts/Makefile
++++ b/arch/arm/boot/dts/Makefile
+@@ -279,6 +279,8 @@ dtb-$(CONFIG_ARCH_MXC) += \
+ 	imx6dqscm-512mb-qwks-rev2-fix-ldo.dtb \
+ 	imx6dqscm-512mb-qwks-rev2-wifi-fix-ldo.dtb \
+ 	imx6dqscm-512mb-qwks-rev2-hdcp-fix-ldo.dtb \
++	imx6dqscm-1gb-hvb-interleave-ldo.dtb \
++	imx6dqscm-2gb-hvb-interleave-ldo.dtb \
+ 	vf610-twr.dtb \
+ 	imx7d-12x12-lpddr3-arm2.dtb \
+ 	imx7d-12x12-ddr3-arm2.dtb \
+diff --git a/arch/arm/boot/dts/imx6dqscm-1gb-hvb-interleave-ldo.dts b/arch/arm/boot/dts/imx6dqscm-1gb-hvb-interleave-ldo.dts
+new file mode 100755
+index 0000000..bff502c
+--- /dev/null
++++ b/arch/arm/boot/dts/imx6dqscm-1gb-hvb-interleave-ldo.dts
+@@ -0,0 +1,10 @@
++/*
++ * Copyright (C) 2015 Freescale Semiconductor, Inc.
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License version 2 as
++ * published by the Free Software Foundation.
++ */
++
++#include "imx6dqscm-1gb-hvb-fix-ldo.dts"
++#include "imx6dqscm-1gb-interleave.dtsi"
+diff --git a/arch/arm/boot/dts/imx6dqscm-1gb-interleave.dtsi b/arch/arm/boot/dts/imx6dqscm-1gb-interleave.dtsi
+index 0497c84..0c296f2 100644
+--- a/arch/arm/boot/dts/imx6dqscm-1gb-interleave.dtsi
++++ b/arch/arm/boot/dts/imx6dqscm-1gb-interleave.dtsi
+@@ -12,7 +12,7 @@
+ 
+ / {
+ 	memory: memory {
+-		reg = <0x10000000 0x40000000>;
++	    linux,usable-memory = <0x10000000 0x40000000>;
+ 	};
+ 
+ };
+diff --git a/arch/arm/boot/dts/imx6dqscm-2gb-hvb-interleave-ldo.dts b/arch/arm/boot/dts/imx6dqscm-2gb-hvb-interleave-ldo.dts
+new file mode 100755
+index 0000000..16b07ae
+--- /dev/null
++++ b/arch/arm/boot/dts/imx6dqscm-2gb-hvb-interleave-ldo.dts
+@@ -0,0 +1,10 @@
++/*
++ * Copyright (C) 2015 Freescale Semiconductor, Inc.
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License version 2 as
++ * published by the Free Software Foundation.
++ */
++
++#include "imx6dqscm-1gb-hvb-fix-ldo.dts"
++#include "imx6dqscm-2gb-interleave.dtsi"
+-- 
+1.9.1
+

@@ -1,0 +1,131 @@
+From 692fc991ac7324f324004f0d301a0f3c1ba9402b Mon Sep 17 00:00:00 2001
+From: Alejandro Sierra <Alejandro.Sierra@freescale.com>
+Date: Wed, 4 Nov 2015 20:29:57 -0600
+Subject: [PATCH 02/21] Added LPDDR2 Interleave Mode support
+
+Added LPDDR2 Interleave Mode support on SCM FreedomX R1.0 and EVB boards
+
+Signed-off-by: Alejandro Sierra <Alejandro.Sierra@freescale.com>
+---
+ .../freescale/mx6scmfreeX/imximage_scm_lpddr2.cfg  | 25 +++++++++++++++++++---
+ board/freescale/mx6scmfreeX/mx6scmfreeX.c          | 10 ++++++++-
+ include/configs/mx6scmfreeX.h                      |  7 +++---
+ 3 files changed, 35 insertions(+), 7 deletions(-)
+
+diff --git a/board/freescale/mx6scmfreeX/imximage_scm_lpddr2.cfg b/board/freescale/mx6scmfreeX/imximage_scm_lpddr2.cfg
+index c0d67af..a707a45 100644
+--- a/board/freescale/mx6scmfreeX/imximage_scm_lpddr2.cfg
++++ b/board/freescale/mx6scmfreeX/imximage_scm_lpddr2.cfg
+@@ -148,7 +148,12 @@ DATA 4,	0x021b001c, 0x00008000
+ DATA 4,	0x021b002c, 0x0F9F26D2
+ DATA 4,	0x021b0030, 0x00000010
+ DATA 4,	0x021b0038, 0x00190778
+-DATA 4,	0x021b0040, 0x0000004F
++#ifdef CONFIG_INTERLEAVING_MODE
++DATA 4, 0x021b0040, 0x00000053
++#else
++DATA 4, 0x021b0040, 0x0000004f
++#endif
++
+ DATA 4,	0x021b0400, 0x11420000
+ DATA 4,	0x021b0000, 0xc3110000
+ 		
+@@ -163,7 +168,12 @@ DATA 4,	0x021b401c, 0x00008000
+ DATA 4,	0x021b402c, 0x0F9F26D2
+ DATA 4,	0x021b4030, 0x00000010
+ DATA 4,	0x021b4038, 0x00190778
+-DATA 4,	0x021b4040, 0x00000017
++#ifdef CONFIG_INTERLEAVING_MODE
++DATA 4, 0x021b4040, 0x00000013
++#else
++DATA 4, 0x021b4040, 0x00000017
++#endif
++
+ DATA 4,	0x021b4400, 0x11420000
+ DATA 4,	0x021b4000, 0xc3110000
+ 		
+@@ -342,7 +352,12 @@ DATA 4, 0x021b001c, 0x00008000
+ DATA 4, 0x021b002c, 0x0f9f26d2
+ DATA 4, 0x021b0030, 0x00000010
+ DATA 4, 0x021b0038, 0x00190778
++#ifdef CONFIG_INTERLEAVING_MODE
++DATA 4, 0x021b0040, 0x00000053
++#else
+ DATA 4, 0x021b0040, 0x0000004f
++#endif
++
+ DATA 4, 0x021b0400, 0x11420000
+ 
+ DATA 4, 0x021b0000, 0x83110000
+@@ -364,8 +379,12 @@ DATA 4, 0x021b402c, 0x0f9f26d2
+ DATA 4, 0x021b4030, 0x00000010
+ 
+ DATA 4, 0x021b4038, 0x00190778
+-
++#ifdef CONFIG_INTERLEAVING_MODE
++DATA 4, 0x021b4040, 0x00000013
++#else
+ DATA 4, 0x021b4040, 0x00000017
++#endif
++
+ DATA 4, 0x021b4400, 0x11420000
+ 
+ DATA 4, 0x021b4000, 0x83110000
+diff --git a/board/freescale/mx6scmfreeX/mx6scmfreeX.c b/board/freescale/mx6scmfreeX/mx6scmfreeX.c
+index 21f9469..75d5007 100644
+--- a/board/freescale/mx6scmfreeX/mx6scmfreeX.c
++++ b/board/freescale/mx6scmfreeX/mx6scmfreeX.c
+@@ -90,9 +90,17 @@ DECLARE_GLOBAL_DATA_PTR;
+ 
+ int dram_init(void)
+ {
++#ifdef CONFIG_INTERLEAVING_MODE
++	u32 mdmisc = readl(MMDC_P0_BASE_ADDR + 0x18);
++	gd->ram_size = imx_ddr_size() << ((mdmisc & 0x00000004)?1:0);
++#else
+         gd->ram_size = imx_ddr_size();
++#endif
++
+ 	return 0;
+ }
++
++#ifndef CONFIG_INTERLEAVING_MODE
+ void dram_init_banksize(void)
+ {
+        gd->bd->bi_dram[0].start = PHYS_SDRAM_0;
+@@ -100,7 +108,7 @@ void dram_init_banksize(void)
+        gd->bd->bi_dram[1].start = PHYS_SDRAM_1;
+        gd->bd->bi_dram[1].size = PHYS_SDRAM_1_SIZE;
+ }
+-
++#endif
+ static iomux_v3_cfg_t const uart1_pads[] = {
+ 	MX6_PAD_CSI0_DAT10__UART1_TX_DATA | MUX_PAD_CTRL(UART_PAD_CTRL),
+ 	MX6_PAD_CSI0_DAT11__UART1_RX_DATA | MUX_PAD_CTRL(UART_PAD_CTRL),
+diff --git a/include/configs/mx6scmfreeX.h b/include/configs/mx6scmfreeX.h
+index 64e398e..dbe7786 100644
+--- a/include/configs/mx6scmfreeX.h
++++ b/include/configs/mx6scmfreeX.h
+@@ -34,15 +34,16 @@
+ #endif
+ 
+ /* Physical Memory Map */
++#ifndef CONFIG_INTERLEAVING_MODE
+ #undef CONFIG_NR_DRAM_BANKS
+ #define CONFIG_NR_DRAM_BANKS            2
+ 
+ #define PHYS_SDRAM_0            MMDC0_ARB_BASE_ADDR     /* SDRAM Bank #1 */
+ #define PHYS_SDRAM_1            MMDC1_ARB_BASE_ADDR     /* SDRAM Bank #2 */
+ 
+-#define PHYS_SDRAM_0_SIZE       0x20000000      /* 512MB */
+-#define PHYS_SDRAM_1_SIZE       0x20000000      /* 512MB */
+-
++#define PHYS_SDRAM_0_SIZE       (512 * 1024 * 1024)      /* 512MB */
++#define PHYS_SDRAM_1_SIZE       (512 * 1024 * 1024)      /* 512MB */
++#endif
+ /*
+  * imx6 q/dl/solo pcie would be failed to work properly in kernel, if
+  * the pcie module is iniialized/enumerated both in uboot and linux
+-- 
+1.9.1
+

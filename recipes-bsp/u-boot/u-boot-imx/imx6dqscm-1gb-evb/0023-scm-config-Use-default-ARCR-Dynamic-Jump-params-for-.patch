@@ -1,0 +1,52 @@
+From e6676e88a1d65a705453beecff4c9a47b24bb69e Mon Sep 17 00:00:00 2001
+From: Juan Gutierrez <juan.gutierrez@nxp.com>
+Date: Mon, 11 Apr 2016 13:31:19 -0500
+Subject: [PATCH 23/23] scm config: Use default ARCR Dynamic Jump params for
+ 512 and 2GB
+
+This is the same fix applied on previous patch but now for
+512 and 2GB configurations.
+
+Using the default values for the Dynamic Jump parameters:
+
+MAARCR[ARCR_DYN_JMP] = 0x1   MAARCR [ARCR_DYN_MAX] = 0xF
+
+Signed-off-by: Juan Gutierrez <juan.gutierrez@nxp.com>
+---
+ board/freescale/mx6dqscmqwks/imximage_scm_lpddr2.cfg | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/board/freescale/mx6dqscmqwks/imximage_scm_lpddr2.cfg b/board/freescale/mx6dqscmqwks/imximage_scm_lpddr2.cfg
+index bb3d542..6bc6503 100755
+--- a/board/freescale/mx6dqscmqwks/imximage_scm_lpddr2.cfg
++++ b/board/freescale/mx6dqscmqwks/imximage_scm_lpddr2.cfg
+@@ -147,7 +147,7 @@ DATA 4 0x021b0038 0x00190778
+ //FIX MODE
+ DATA 4 0x021b0040 0x0000004f
+ 
+-DATA 4 0x021b0400 0x11420000
++//DATA 4 0x021b0400 0x11420000
+ 
+ DATA 4 0x021b0000 0x83110000
+ 
+@@ -309,7 +309,7 @@ DATA 4, 0x021b0040, 0x00000063
+ DATA 4, 0x021b0040, 0x0000005f
+ #endif
+ 
+-DATA 4, 0x021b0400, 0x11420000
++//DATA 4, 0x021b0400, 0x11420000
+ DATA 4, 0x021b0000, 0xc3110000
+ 
+ DATA 4, 0x021b4004, 0x00020036
+@@ -336,7 +336,7 @@ DATA 4, 0x021b4040, 0x00000023
+ DATA 4, 0x021b4040, 0x00000027
+ #endif
+ 
+-DATA 4, 0x021b4400, 0x11420000
++//DATA 4, 0x021b4400, 0x11420000
+ DATA 4, 0x021b4000, 0xc3110000
+ 
+ /* Channel 0 */
+-- 
+1.9.1
+

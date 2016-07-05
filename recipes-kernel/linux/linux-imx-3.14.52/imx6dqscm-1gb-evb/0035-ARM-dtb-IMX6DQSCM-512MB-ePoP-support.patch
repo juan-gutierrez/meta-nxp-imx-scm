@@ -1,0 +1,246 @@
+From 896c3783e1248b367c3ecda48fb47fd7672c4265 Mon Sep 17 00:00:00 2001
+From: Alejandro Sierra <b18039@freescale.com>
+Date: Thu, 31 Mar 2016 14:34:14 -0500
+Subject: [PATCH 35/37] ARM: dtb: IMX6DQSCM 512MB ePoP support
+
+ARM: dtb: IMX6DQSCM 512MB ePoP support for the following board list:
+    - IMX6DQSCM EVB board
+    - IMX6DQSCM QWKS REV2 board
+
+Signed-off-by: Alejandro Sierra <b18039@freescale.com>
+---
+ arch/arm/boot/dts/Makefile                             |  7 +++++++
+ .../boot/dts/imx6dqscm-512mb-evb-btwifi-fix-ldo.dts    | 15 +++++++++++++++
+ .../boot/dts/imx6dqscm-512mb-evb-enetirq-fix-ldo.dts   | 15 +++++++++++++++
+ arch/arm/boot/dts/imx6dqscm-512mb-evb-fix-ldo.dts      | 15 +++++++++++++++
+ arch/arm/boot/dts/imx6dqscm-512mb-evb-hdcp-fix-ldo.dts | 15 +++++++++++++++
+ arch/arm/boot/dts/imx6dqscm-512mb-fix.dtsi             | 18 ++++++++++++++++++
+ arch/arm/boot/dts/imx6dqscm-512mb-hvb-fix-ldo.dts      |  8 ++------
+ .../arm/boot/dts/imx6dqscm-512mb-qwks-rev2-fix-ldo.dts | 15 +++++++++++++++
+ .../dts/imx6dqscm-512mb-qwks-rev2-hdcp-fix-ldo.dts     | 15 +++++++++++++++
+ .../dts/imx6dqscm-512mb-qwks-rev2-wifi-fix-ldo.dts     | 15 +++++++++++++++
+ 10 files changed, 132 insertions(+), 6 deletions(-)
+ create mode 100644 arch/arm/boot/dts/imx6dqscm-512mb-evb-btwifi-fix-ldo.dts
+ create mode 100644 arch/arm/boot/dts/imx6dqscm-512mb-evb-enetirq-fix-ldo.dts
+ create mode 100644 arch/arm/boot/dts/imx6dqscm-512mb-evb-fix-ldo.dts
+ create mode 100644 arch/arm/boot/dts/imx6dqscm-512mb-evb-hdcp-fix-ldo.dts
+ create mode 100644 arch/arm/boot/dts/imx6dqscm-512mb-fix.dtsi
+ create mode 100644 arch/arm/boot/dts/imx6dqscm-512mb-qwks-rev2-fix-ldo.dts
+ create mode 100644 arch/arm/boot/dts/imx6dqscm-512mb-qwks-rev2-hdcp-fix-ldo.dts
+ create mode 100644 arch/arm/boot/dts/imx6dqscm-512mb-qwks-rev2-wifi-fix-ldo.dts
+
+diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+index c906538..3ec3987 100644
+--- a/arch/arm/boot/dts/Makefile
++++ b/arch/arm/boot/dts/Makefile
+@@ -272,6 +272,13 @@ dtb-$(CONFIG_ARCH_MXC) += \
+         imx6dqscm-1gb-qwks-rev2-hdcp-interleave-ldo.dtb \
+ 	imx6dqscm-1gb-hvb-fix-ldo.dtb \
+ 	imx6dqscm-512mb-hvb-fix-ldo.dtb \
++	imx6dqscm-512mb-evb-fix-ldo.dtb \
++	imx6dqscm-512mb-evb-btwifi-fix-ldo.dtb \
++	imx6dqscm-512mb-evb-enetirq-fix-ldo.dtb \
++	imx6dqscm-512mb-evb-hdcp-fix-ldo.dtb \
++	imx6dqscm-512mb-qwks-rev2-fix-ldo.dtb \
++	imx6dqscm-512mb-qwks-rev2-wifi-fix-ldo.dtb \
++	imx6dqscm-512mb-qwks-rev2-hdcp-fix-ldo.dtb \
+ 	vf610-twr.dtb \
+ 	imx7d-12x12-lpddr3-arm2.dtb \
+ 	imx7d-12x12-ddr3-arm2.dtb \
+diff --git a/arch/arm/boot/dts/imx6dqscm-512mb-evb-btwifi-fix-ldo.dts b/arch/arm/boot/dts/imx6dqscm-512mb-evb-btwifi-fix-ldo.dts
+new file mode 100644
+index 0000000..bf7f506
+--- /dev/null
++++ b/arch/arm/boot/dts/imx6dqscm-512mb-evb-btwifi-fix-ldo.dts
+@@ -0,0 +1,15 @@
++/*
++ * Copyright 2012 Freescale Semiconductor, Inc.
++ * Copyright 2011 Linaro Ltd.
++ *
++ * The code contained herein is licensed under the GNU General Public
++ * License. You may obtain a copy of the GNU General Public License
++ * Version 2 or later at the following locations:
++ *
++ * http://www.opensource.org/licenses/gpl-license.html
++ * http://www.gnu.org/copyleft/gpl.html
++ */
++
++#include "imx6dqscm-1gb-evb-btwifi-fix-ldo.dts"
++#include "imx6dqscm-512mb-fix.dtsi"
++
+diff --git a/arch/arm/boot/dts/imx6dqscm-512mb-evb-enetirq-fix-ldo.dts b/arch/arm/boot/dts/imx6dqscm-512mb-evb-enetirq-fix-ldo.dts
+new file mode 100644
+index 0000000..cef6faf
+--- /dev/null
++++ b/arch/arm/boot/dts/imx6dqscm-512mb-evb-enetirq-fix-ldo.dts
+@@ -0,0 +1,15 @@
++/*
++ * Copyright 2012 Freescale Semiconductor, Inc.
++ * Copyright 2011 Linaro Ltd.
++ *
++ * The code contained herein is licensed under the GNU General Public
++ * License. You may obtain a copy of the GNU General Public License
++ * Version 2 or later at the following locations:
++ *
++ * http://www.opensource.org/licenses/gpl-license.html
++ * http://www.gnu.org/copyleft/gpl.html
++ */
++
++#include "imx6dqscm-1gb-evb-enetirq-fix-ldo.dts"
++#include "imx6dqscm-512mb-fix.dtsi"
++
+diff --git a/arch/arm/boot/dts/imx6dqscm-512mb-evb-fix-ldo.dts b/arch/arm/boot/dts/imx6dqscm-512mb-evb-fix-ldo.dts
+new file mode 100644
+index 0000000..8d7d042
+--- /dev/null
++++ b/arch/arm/boot/dts/imx6dqscm-512mb-evb-fix-ldo.dts
+@@ -0,0 +1,15 @@
++/*
++ * Copyright 2012 Freescale Semiconductor, Inc.
++ * Copyright 2011 Linaro Ltd.
++ *
++ * The code contained herein is licensed under the GNU General Public
++ * License. You may obtain a copy of the GNU General Public License
++ * Version 2 or later at the following locations:
++ *
++ * http://www.opensource.org/licenses/gpl-license.html
++ * http://www.gnu.org/copyleft/gpl.html
++ */
++
++#include "imx6dqscm-1gb-evb-fix-ldo.dts"
++#include "imx6dqscm-512mb-fix.dtsi"
++
+diff --git a/arch/arm/boot/dts/imx6dqscm-512mb-evb-hdcp-fix-ldo.dts b/arch/arm/boot/dts/imx6dqscm-512mb-evb-hdcp-fix-ldo.dts
+new file mode 100644
+index 0000000..f72472d
+--- /dev/null
++++ b/arch/arm/boot/dts/imx6dqscm-512mb-evb-hdcp-fix-ldo.dts
+@@ -0,0 +1,15 @@
++/*
++ * Copyright 2012 Freescale Semiconductor, Inc.
++ * Copyright 2011 Linaro Ltd.
++ *
++ * The code contained herein is licensed under the GNU General Public
++ * License. You may obtain a copy of the GNU General Public License
++ * Version 2 or later at the following locations:
++ *
++ * http://www.opensource.org/licenses/gpl-license.html
++ * http://www.gnu.org/copyleft/gpl.html
++ */
++
++#include "imx6dqscm-1gb-evb-hdcp-fix-ldo.dts"
++#include "imx6dqscm-512mb-fix.dtsi"
++
+diff --git a/arch/arm/boot/dts/imx6dqscm-512mb-fix.dtsi b/arch/arm/boot/dts/imx6dqscm-512mb-fix.dtsi
+new file mode 100644
+index 0000000..12a3ea0
+--- /dev/null
++++ b/arch/arm/boot/dts/imx6dqscm-512mb-fix.dtsi
+@@ -0,0 +1,18 @@
++/*
++ * Copyright 2012 Freescale Semiconductor, Inc.
++ * Copyright 2011 Linaro Ltd.
++ *
++ * The code contained herein is licensed under the GNU General Public
++ * License. You may obtain a copy of the GNU General Public License
++ * Version 2 or later at the following locations:
++ *
++ * http://www.opensource.org/licenses/gpl-license.html
++ * http://www.gnu.org/copyleft/gpl.html
++ */
++
++/ {
++	memory: memory {
++               linux,usable-memory = <0x10000000 0x20000000>; 
++        };
++};
++
+diff --git a/arch/arm/boot/dts/imx6dqscm-512mb-hvb-fix-ldo.dts b/arch/arm/boot/dts/imx6dqscm-512mb-hvb-fix-ldo.dts
+index 24ca80c..f16313d 100755
+--- a/arch/arm/boot/dts/imx6dqscm-512mb-hvb-fix-ldo.dts
++++ b/arch/arm/boot/dts/imx6dqscm-512mb-hvb-fix-ldo.dts
+@@ -14,16 +14,12 @@
+ /dts-v1/;
+ 
+ #include "imx6q.dtsi"
+-
++#include "imx6dqscm-512mb-fix.dtsi"
+ / {
+     model = "Freescale i.MX6D SCM HVB";
+     compatible = "fsl,imx6q-sabresd", "fsl,imx6q";
+     
+-	memory: memory {
+-            linux,usable-memory = <0x80000000 0x20000000>; 
+-    };
+-    
+-	aliases {
++    aliases {
+             mxcfb0 = &mxcfb1;
+             mxcfb1 = &mxcfb2;
+             mxcfb3 = &mxcfb4;
+diff --git a/arch/arm/boot/dts/imx6dqscm-512mb-qwks-rev2-fix-ldo.dts b/arch/arm/boot/dts/imx6dqscm-512mb-qwks-rev2-fix-ldo.dts
+new file mode 100644
+index 0000000..e915fc8
+--- /dev/null
++++ b/arch/arm/boot/dts/imx6dqscm-512mb-qwks-rev2-fix-ldo.dts
+@@ -0,0 +1,15 @@
++/*
++ * Copyright 2012 Freescale Semiconductor, Inc.
++ * Copyright 2011 Linaro Ltd.
++ *
++ * The code contained herein is licensed under the GNU General Public
++ * License. You may obtain a copy of the GNU General Public License
++ * Version 2 or later at the following locations:
++ *
++ * http://www.opensource.org/licenses/gpl-license.html
++ * http://www.gnu.org/copyleft/gpl.html
++ */
++
++#include "imx6dqscm-1gb-qwks-rev2-fix-ldo.dts"
++#include "imx6dqscm-512mb-fix.dtsi"
++
+diff --git a/arch/arm/boot/dts/imx6dqscm-512mb-qwks-rev2-hdcp-fix-ldo.dts b/arch/arm/boot/dts/imx6dqscm-512mb-qwks-rev2-hdcp-fix-ldo.dts
+new file mode 100644
+index 0000000..5e525ab
+--- /dev/null
++++ b/arch/arm/boot/dts/imx6dqscm-512mb-qwks-rev2-hdcp-fix-ldo.dts
+@@ -0,0 +1,15 @@
++/*
++ * Copyright 2012 Freescale Semiconductor, Inc.
++ * Copyright 2011 Linaro Ltd.
++ *
++ * The code contained herein is licensed under the GNU General Public
++ * License. You may obtain a copy of the GNU General Public License
++ * Version 2 or later at the following locations:
++ *
++ * http://www.opensource.org/licenses/gpl-license.html
++ * http://www.gnu.org/copyleft/gpl.html
++ */
++
++#include "imx6dqscm-1gb-qwks-rev2-hdcp-fix-ldo.dts"
++#include "imx6dqscm-512mb-fix.dtsi"
++
+diff --git a/arch/arm/boot/dts/imx6dqscm-512mb-qwks-rev2-wifi-fix-ldo.dts b/arch/arm/boot/dts/imx6dqscm-512mb-qwks-rev2-wifi-fix-ldo.dts
+new file mode 100644
+index 0000000..ac6d86d
+--- /dev/null
++++ b/arch/arm/boot/dts/imx6dqscm-512mb-qwks-rev2-wifi-fix-ldo.dts
+@@ -0,0 +1,15 @@
++/*
++ * Copyright 2012 Freescale Semiconductor, Inc.
++ * Copyright 2011 Linaro Ltd.
++ *
++ * The code contained herein is licensed under the GNU General Public
++ * License. You may obtain a copy of the GNU General Public License
++ * Version 2 or later at the following locations:
++ *
++ * http://www.opensource.org/licenses/gpl-license.html
++ * http://www.gnu.org/copyleft/gpl.html
++ */
++
++#include "imx6dqscm-1gb-qwks-rev2-wifi-fix-ldo.dts"
++#include "imx6dqscm-512mb-fix.dtsi"
++
+-- 
+1.9.1
+

@@ -1,0 +1,98 @@
+From 44f2f41144a215714d9b83b727b668ffb4066e17 Mon Sep 17 00:00:00 2001
+From: Alejandro Sierra <b18039@freescale.com>
+Date: Fri, 8 Jan 2016 16:11:35 -0600
+Subject: [PATCH 14/37] ARM: dts: murata wifi QWKS board support
+
+Add QWKS board dts file for imx6scm Single Chip Module to support Murata's WiFi.
+Support for the following dtb features:
+        - imx6dqscm-1gb-qwks-rev1-wifi-ldo.dtb
+
+Signed-off-by: Alejandro Sierra <b18039@freescale.com>
+---
+ arch/arm/boot/dts/Makefile                         |  1 +
+ .../boot/dts/imx6dqscm-1gb-qwks-rev1-wifi-ldo.dts  | 10 +++++
+ arch/arm/boot/dts/imx6dqscm-qwks-rev1-wifi.dtsi    | 43 ++++++++++++++++++++++
+ 3 files changed, 54 insertions(+)
+ create mode 100644 arch/arm/boot/dts/imx6dqscm-1gb-qwks-rev1-wifi-ldo.dts
+ create mode 100644 arch/arm/boot/dts/imx6dqscm-qwks-rev1-wifi.dtsi
+
+diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+index 5fa50aa..cfc304e 100644
+--- a/arch/arm/boot/dts/Makefile
++++ b/arch/arm/boot/dts/Makefile
+@@ -252,6 +252,7 @@ dtb-$(CONFIG_ARCH_MXC) += \
+ 	imx6dqscm-2gb-evb-hdcp-ldo.dtb \
+ 	imx6dqscm-1gb-qwks-rev1-ldo.dtb \
+ 	imx6dqscm-1gb-qwks-rev1-hdcp-ldo.dtb \
++	imx6dqscm-1gb-qwks-rev1-wifi-ldo.dtb \
+ 	vf610-twr.dtb \
+ 	imx7d-12x12-lpddr3-arm2.dtb \
+ 	imx7d-12x12-ddr3-arm2.dtb \
+diff --git a/arch/arm/boot/dts/imx6dqscm-1gb-qwks-rev1-wifi-ldo.dts b/arch/arm/boot/dts/imx6dqscm-1gb-qwks-rev1-wifi-ldo.dts
+new file mode 100644
+index 0000000..c57a135
+--- /dev/null
++++ b/arch/arm/boot/dts/imx6dqscm-1gb-qwks-rev1-wifi-ldo.dts
+@@ -0,0 +1,10 @@
++/*
++ * Copyright (C) 2015 Freescale Semiconductor, Inc.
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License version 2 as
++ * published by the Free Software Foundation.
++ */
++
++#include "imx6dqscm-1gb-qwks-rev1-ldo.dts"
++#include "imx6dqscm-qwks-rev1-wifi.dtsi"
+diff --git a/arch/arm/boot/dts/imx6dqscm-qwks-rev1-wifi.dtsi b/arch/arm/boot/dts/imx6dqscm-qwks-rev1-wifi.dtsi
+new file mode 100644
+index 0000000..3a98f59
+--- /dev/null
++++ b/arch/arm/boot/dts/imx6dqscm-qwks-rev1-wifi.dtsi
+@@ -0,0 +1,43 @@
++/*
++ * Copyright (C) 2015 Freescale Semiconductor, Inc.
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License version 2 as
++ * published by the Free Software Foundation.
++ */
++
++/*
++ * NOTE: This DTS file is written for plugging in Murata Wi-Fi/BT QWKS into Bottom SD
++ * slot using Murata i.MX InterConnect Ver 2.0 Adapter
++ * No BT functionality at this point 
++ */
++
++/ {
++	bcmdhd_wlan_0: bcmdhd_wlan@0 {
++		compatible = "android,bcmdhd_wlan";
++	};
++};
++
++&iomuxc {
++	imx6qdl-sabresd-murata-v2 {
++		/* add MUXing entry for SD2 4-bit interface and configure control pins */
++		pinctrl_wifi: wifigrp {
++			fsl,pins = <
++				MX6QDL_PAD_SD2_CMD__SD2_CMD		0x17059
++				MX6QDL_PAD_SD2_CLK__SD2_CLK		0x10059
++				MX6QDL_PAD_SD2_DAT0__SD2_DATA0		0x17059
++				MX6QDL_PAD_SD2_DAT1__SD2_DATA1		0x17059
++				MX6QDL_PAD_SD2_DAT2__SD2_DATA2		0x17059
++				MX6QDL_PAD_SD2_DAT3__SD2_DATA3		0x17059
++			>;
++		};
++	};
++};
++
++&usdhc2 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_wifi>;
++	bus-width = <4>;
++	no-1-8-v;
++	wifi-host;
++};
+-- 
+1.9.1
+

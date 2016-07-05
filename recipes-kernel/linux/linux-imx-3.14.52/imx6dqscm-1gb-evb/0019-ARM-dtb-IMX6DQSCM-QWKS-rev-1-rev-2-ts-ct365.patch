@@ -1,0 +1,42 @@
+From 4c384e3a0ebfffc0bd86673de9f454e018568fba Mon Sep 17 00:00:00 2001
+From: Alejandro Sierra <b18039@freescale.com>
+Date: Mon, 18 Jan 2016 14:43:52 -0600
+Subject: [PATCH 19/37] ARM: dtb: IMX6DQSCM QWKS rev 1, rev 2 ts ct365
+
+dtb ct365 definition at the touchscreen node for IMX6DQSCM QWKS
+
+Signed-off-by: Alejandro Sierra <b18039@freescale.com>
+---
+ arch/arm/boot/dts/imx6dqscm-qwks-rev1.dtsi | 2 +-
+ arch/arm/boot/dts/imx6dqscm-qwks-rev2.dtsi | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/arch/arm/boot/dts/imx6dqscm-qwks-rev1.dtsi b/arch/arm/boot/dts/imx6dqscm-qwks-rev1.dtsi
+index e559a0b..2cf3fdb 100644
+--- a/arch/arm/boot/dts/imx6dqscm-qwks-rev1.dtsi
++++ b/arch/arm/boot/dts/imx6dqscm-qwks-rev1.dtsi
+@@ -289,7 +289,7 @@
+ 	};
+ 
+  	touchscreen@01 {
+-                compatible = "vtl";
++                compatible = "vtl,ct365";
+                 reg = <0x01>;
+ 		interrupt-parent = <&gpio6>;
+ 		interrupts = <14 0>;
+diff --git a/arch/arm/boot/dts/imx6dqscm-qwks-rev2.dtsi b/arch/arm/boot/dts/imx6dqscm-qwks-rev2.dtsi
+index ee4b8c1..09ae114 100644
+--- a/arch/arm/boot/dts/imx6dqscm-qwks-rev2.dtsi
++++ b/arch/arm/boot/dts/imx6dqscm-qwks-rev2.dtsi
+@@ -302,7 +302,7 @@
+ 	};
+ 
+  	touchscreen@01 {
+-                compatible = "vtl";
++                compatible = "vtl,ct365";
+                 reg = <0x01>;
+ 		interrupt-parent = <&gpio6>;
+ 		interrupts = <14 0>;
+-- 
+1.9.1
+

@@ -1,0 +1,30 @@
+From 40d8fbc657da9fcb286899b36b83f5ac7194aaa6 Mon Sep 17 00:00:00 2001
+From: Alejandro Sierra <b18039@freescale.com>
+Date: Wed, 16 Dec 2015 16:41:42 -0600
+Subject: [PATCH 09/37] reboot issue after the system wakes from DSM
+
+The system reboots after awakes from DSM. This could be related with the SNVS voltage on imx6dqscm.
+Workaround:
+PMIC_STBY_REQ signal NOT asserted to enable STANDBY mode on PMIC.
+
+Signed-off-by: Alejandro Sierra <b18039@freescale.com>
+---
+ arch/arm/mach-imx/pm-imx6.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/arm/mach-imx/pm-imx6.c b/arch/arm/mach-imx/pm-imx6.c
+index c8b91f7..bc1fe35 100644
+--- a/arch/arm/mach-imx/pm-imx6.c
++++ b/arch/arm/mach-imx/pm-imx6.c
+@@ -796,7 +796,7 @@ static int imx6q_pm_enter(suspend_state_t state)
+ 		imx6q_set_lpm(WAIT_CLOCKED);
+ 		break;
+ 	case PM_SUSPEND_MEM:
+-		imx6q_set_lpm(STOP_POWER_OFF);
++		imx6q_set_lpm(STOP_POWER_ON);
+ 		imx6q_set_int_mem_clk_lpm(false);
+ 		imx6q_enable_wb(true);
+ 		/*
+-- 
+1.9.1
+

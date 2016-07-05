@@ -1,0 +1,45 @@
+From 60687af25534e63efbcf3e4a5f5276185b8cb8c1 Mon Sep 17 00:00:00 2001
+From: Alejandro Sierra <b18039@freescale.com>
+Date: Mon, 18 Jan 2016 16:00:37 -0600
+Subject: [PATCH 20/37] ARM: dtb: Add wifi reg wlreg_on for QWKS board
+
+Add wifi regulator named wlreg_on for IMX6DQSCM QWKS board,
+needed by Murata module.
+
+Signed-off-by: Alejandro Sierra <b18039@freescale.com>
+---
+ arch/arm/boot/dts/imx6dqscm-qwks-rev1-wifi.dtsi | 18 +++++++++++++++---
+ 1 file changed, 15 insertions(+), 3 deletions(-)
+
+diff --git a/arch/arm/boot/dts/imx6dqscm-qwks-rev1-wifi.dtsi b/arch/arm/boot/dts/imx6dqscm-qwks-rev1-wifi.dtsi
+index 3a98f59..d6c2f18 100644
+--- a/arch/arm/boot/dts/imx6dqscm-qwks-rev1-wifi.dtsi
++++ b/arch/arm/boot/dts/imx6dqscm-qwks-rev1-wifi.dtsi
+@@ -13,9 +13,21 @@
+  */
+ 
+ / {
+-	bcmdhd_wlan_0: bcmdhd_wlan@0 {
+-		compatible = "android,bcmdhd_wlan";
+-	};
++        regulators {
++                wlreg_on: fixedregulator@100 {
++                        compatible = "regulator-fixed";
++                        regulator-min-microvolt = <5000000>;
++                        regulator-max-microvolt = <5000000>;
++                        regulator-name = "wlreg_on";
++			regulator-boot-on;
++                        regulator-always-on;
++                };
++        };
++
++        bcmdhd_wlan_0: bcmdhd_wlan@0 {
++                compatible = "android,bcmdhd_wlan";
++                wlreg_on-supply = <&wlreg_on>;
++        };
+ };
+ 
+ &iomuxc {
+-- 
+1.9.1
+
