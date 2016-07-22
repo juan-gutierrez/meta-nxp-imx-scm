@@ -1,0 +1,46 @@
+From fcf746a858e616dcac754376c6ac8a3c465757c7 Mon Sep 17 00:00:00 2001
+From: Juan Gutierrez <juan.gutierrez@nxp.com>
+Date: Wed, 1 Jun 2016 21:19:16 -0500
+Subject: [PATCH 10/11] mx6sxscm: enable i2c4 for SCM EVB board
+
+Signed-off-by: Juan Gutierrez <juan.gutierrez@nxp.com>
+---
+ board/freescale/mx6sxscm/mx6sxscm.c | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
+
+diff --git a/board/freescale/mx6sxscm/mx6sxscm.c b/board/freescale/mx6sxscm/mx6sxscm.c
+index 49aa456..6b9cb67 100644
+--- a/board/freescale/mx6sxscm/mx6sxscm.c
++++ b/board/freescale/mx6sxscm/mx6sxscm.c
+@@ -490,6 +490,20 @@ struct i2c_pads_info i2c_pad_info2 = {
+ 	},
+ };
+ 
++/* I2C4 */
++struct i2c_pads_info i2c_pad_info4 = {
++    .scl = {
++        .i2c_mode = MX6_PAD_CSI_DATA06__I2C4_SCL | PC,
++        .gpio_mode = MX6_PAD_CSI_DATA06__GPIO1_IO_20 | PC,
++        .gp = IMX_GPIO_NR(1, 20),
++    },
++    .sda = {
++        .i2c_mode = MX6_PAD_CSI_DATA07__I2C4_SDA | PC,
++        .gpio_mode = MX6_PAD_CSI_DATA07__GPIO1_IO_21 | PC,
++        .gp = IMX_GPIO_NR(1, 21),
++    },
++};
++
+ static struct pmic *pfuze;
+ int power_init_board(void)
+ {
+@@ -920,6 +934,7 @@ int board_init(void)
+ #ifdef CONFIG_SYS_I2C_MXC
+ 	setup_i2c(0, CONFIG_SYS_I2C_SPEED, 0x7f, &i2c_pad_info1);
+ 	setup_i2c(1, CONFIG_SYS_I2C_SPEED, 0x7f, &i2c_pad_info2);
++	setup_i2c(3, CONFIG_SYS_I2C_SPEED, 0x7f, &i2c_pad_info4);
+ #endif
+ 
+ #ifdef CONFIG_USB_EHCI_MX6
+-- 
+1.9.1
+

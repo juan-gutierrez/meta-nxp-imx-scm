@@ -1,0 +1,74 @@
+From b9a957f23d8569582ae39f3d1dc175d2f6138d1b Mon Sep 17 00:00:00 2001
+From: Alejandro Sierra <b18039@freescale.com>
+Date: Wed, 20 Apr 2016 09:30:08 -0500
+Subject: [PATCH 04/11] Adjust PMIC voltages for IMX6SXSCM EVB board
+
+PFUZE0100 voltages were adjusted to meet following requirements:
+SW1AB --> 1.350V --> Powers VDD_ARM, VDD_SOC
+VGEN3 --> 2.800V --> Powers CSI Parallel camera
+
+Signed-off-by: Alejandro Sierra <b18039@freescale.com>
+---
+ board/freescale/mx6sxscm/mx6sxscm.c | 35 +++++++++++++----------------------
+ 1 file changed, 13 insertions(+), 22 deletions(-)
+
+diff --git a/board/freescale/mx6sxscm/mx6sxscm.c b/board/freescale/mx6sxscm/mx6sxscm.c
+index f40ac9f..8733ea8 100644
+--- a/board/freescale/mx6sxscm/mx6sxscm.c
++++ b/board/freescale/mx6sxscm/mx6sxscm.c
+@@ -506,39 +506,30 @@ int power_init_board(void)
+ 	reg &= ~0x3f;
+ 	reg |= 0x20;
+ 	pmic_reg_write(pfuze, PFUZE100_SW3AVOL, reg);
+-/*
+-	 set SW1AB standby volatage 1.10V 
++
++	/* set SW1AB normal volatage 1.350V */
++	pmic_reg_read(pfuze, PFUZE100_SW1ABVOL, &reg);
++	reg &= ~0x3f;
++	reg |= PFUZE100_SW1ABC_SETP(13500);
++	pmic_reg_write(pfuze, PFUZE100_SW1ABVOL, reg);
++
++	/* set SW1AB standby volatage 1.10V */
+ 	pmic_reg_read(pfuze, PFUZE100_SW1ABSTBY, &reg);
+ 	reg &= ~0x3f;
+ 	reg |= PFUZE100_SW1ABC_SETP(11000);
+ 	pmic_reg_write(pfuze, PFUZE100_SW1ABSTBY, reg);
+ 
+-	 set SW1AB/VDDARM step ramp up time from 16us to 4us/25mV 
++	/* set SW1AB/VDDARM step ramp up time from 16us to 4us/25mV */
+ 	pmic_reg_read(pfuze, PFUZE100_SW1ABCONF, &reg);
+ 	reg &= ~0xc0;
+ 	reg |= 0x40;
+ 	pmic_reg_write(pfuze, PFUZE100_SW1ABCONF, reg);
+ 
+-	 set SW1C standby volatage 1.10V 
+-	pmic_reg_read(pfuze, PFUZE100_SW1CSTBY, &reg);
+-	reg &= ~0x3f;
+-	reg |= PFUZE100_SW1ABC_SETP(11000);
+-	pmic_reg_write(pfuze, PFUZE100_SW1CSTBY, reg);
+-
+-	 set SW1C/VDDSOC step ramp up time to from 16us to 4us/25mV 
+-	pmic_reg_read(pfuze, PFUZE100_SW1CCONF, &reg);
+-	reg &= ~0xc0;
+-	reg |= 0x40;
+-	pmic_reg_write(pfuze, PFUZE100_SW1CCONF, reg);
+-
+-	 Enable power of VGEN5 3V3, needed for SD3 
+-*/
+-/*
+-	pmic_reg_read(pfuze, PFUZE100_VGEN5VOL, &reg);
++	pmic_reg_read(pfuze, PFUZE100_VGEN3VOL, &reg);
+ 	reg &= ~LDO_VOL_MASK;
+-	reg |= (LDOB_3_30V | (1 << LDO_EN));
+-	pmic_reg_write(pfuze, PFUZE100_VGEN5VOL, reg);
+-*/
++	reg |= (LDOB_2_80V | (1 << LDO_EN));
++	pmic_reg_write(pfuze, PFUZE100_VGEN3VOL, reg);
++
+ 	return 0;
+ }
+ 
+-- 
+1.9.1
+

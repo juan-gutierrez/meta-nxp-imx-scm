@@ -1,0 +1,217 @@
+From 01ad317620e5819b985a436c0984a2466428f16b Mon Sep 17 00:00:00 2001
+From: Alejandro Sierra <b18039@freescale.com>
+Date: Fri, 22 Apr 2016 17:21:31 -0500
+Subject: [PATCH 05/11] Add support for IMX6SXSCM 512MB and EPOP
+
+Add support for IMX6SXSCM 512MB and EPOP packages.
+
+Signed-off-by: Alejandro Sierra <b18039@freescale.com>
+---
+ board/freescale/mx6sxscm/imximage_lpddr2.cfg |   4 +
+ configs/mx6sxscm_512mb_evb_defconfig         |   7 ++
+ configs/mx6sxscm_epop_evb_defconfig          |   7 ++
+ include/configs/mx6sxscm.h                   | 138 +++++++++++++++++++++++++++
+ 4 files changed, 156 insertions(+)
+ create mode 100644 configs/mx6sxscm_512mb_evb_defconfig
+ create mode 100644 configs/mx6sxscm_epop_evb_defconfig
+
+diff --git a/board/freescale/mx6sxscm/imximage_lpddr2.cfg b/board/freescale/mx6sxscm/imximage_lpddr2.cfg
+index e921ae9..6b67769 100644
+--- a/board/freescale/mx6sxscm/imximage_lpddr2.cfg
++++ b/board/freescale/mx6sxscm/imximage_lpddr2.cfg
+@@ -117,7 +117,11 @@ DATA 4 0x021b0030 0x0000020e
+ DATA 4 0x021b0038 0x00190778
+ DATA 4 0x021b0008 0x00000000
+ DATA 4 0x021b0040 0x0000004f
++#ifdef CONFIG_512MB_LPDDR2
++DATA 4 0x021b0000 0x83110000
++#else
+ DATA 4 0x021b0000 0xc3110000
++#endif
+ 
+ DATA 4 0x021b001c 0x003f8030
+ DATA 4 0x021b001c 0xff0a8030
+diff --git a/configs/mx6sxscm_512mb_evb_defconfig b/configs/mx6sxscm_512mb_evb_defconfig
+new file mode 100644
+index 0000000..555f7b6
+--- /dev/null
++++ b/configs/mx6sxscm_512mb_evb_defconfig
+@@ -0,0 +1,7 @@
++CONFIG_SYS_EXTRA_OPTIONS="IMX_CONFIG=board/freescale/mx6sxscm/imximage_lpddr2.cfg,MX6SX,512MB_LPDDR2"
++CONFIG_ARM=y
++CONFIG_TARGET_MX6SXSCM=y
++CONFIG_SYS_MALLOC_F=y
++CONFIG_SYS_MALLOC_F_LEN=0x400
++CONFIG_DM=y
++CONFIG_DM_THERMAL=y
+diff --git a/configs/mx6sxscm_epop_evb_defconfig b/configs/mx6sxscm_epop_evb_defconfig
+new file mode 100644
+index 0000000..6a108fa
+--- /dev/null
++++ b/configs/mx6sxscm_epop_evb_defconfig
+@@ -0,0 +1,7 @@
++CONFIG_SYS_EXTRA_OPTIONS="IMX_CONFIG=board/freescale/mx6sxscm/imximage_lpddr2.cfg,MX6SX,512MB_LPDDR2,MX6SXSABRESD_EMMC_REWORK"
++CONFIG_ARM=y
++CONFIG_TARGET_MX6SXSCM=y
++CONFIG_SYS_MALLOC_F=y
++CONFIG_SYS_MALLOC_F_LEN=0x400
++CONFIG_DM=y
++CONFIG_DM_THERMAL=y
+diff --git a/include/configs/mx6sxscm.h b/include/configs/mx6sxscm.h
+index d9ee452..4752bf7 100644
+--- a/include/configs/mx6sxscm.h
++++ b/include/configs/mx6sxscm.h
+@@ -27,7 +27,143 @@
+ #define CONFIG_SYS_FSL_ESDHC_ADDR	USDHC4_BASE_ADDR
+ #define CONFIG_SYS_FSL_USDHC_NUM	3
+ */
++#ifdef CONFIG_512MB_LPDDR2
++#undef PHYS_SDRAM_SIZE
++#define PHYS_SDRAM_SIZE		SZ_512M
++#endif
++
+ #undef CONFIG_EXTRA_ENV_SETTINGS
++#if defined CONFIG_512MB_LPDDR2 && defined CONFIG_MX6SXSABRESD_EMMC_REWORK 
++#define CONFIG_EXTRA_ENV_SETTINGS \
++	CONFIG_MFG_ENV_SETTINGS \
++	UPDATE_M4_ENV \
++	CONFIG_VIDEO_MODE \
++	"script=boot.scr\0" \
++	"image=zImage\0" \
++	"console=ttymxc2\0" \
++	"fdt_high=0xffffffff\0" \
++	"initrd_high=0xffffffff\0" \
++	"fdt_file=imx6sxscm-epop-evb-ldo.dtb\0" \
++	"fdt_addr=0x83000000\0" \
++	"boot_fdt=try\0" \
++	"ip_dyn=yes\0" \
++	"mmcdev="__stringify(CONFIG_SYS_MMC_ENV_DEV)"\0" \
++	"mmcpart=1\0" \
++	"mmcroot=" CONFIG_MMCROOT " rootwait rw\0" \
++	"mmcautodetect=yes\0" \
++	"mmcargs=setenv bootargs console=${console},${baudrate} " \
++		"root=${mmcroot}\0" \
++	"loadbootscript=" \
++		"fatload mmc ${mmcdev}:${mmcpart} ${loadaddr} ${script};\0" \
++	"bootscript=echo Running bootscript from mmc ...; " \
++		"source\0" \
++	"loadimage=fatload mmc ${mmcdev}:${mmcpart} ${loadaddr} ${image}\0" \
++	"loadfdt=fatload mmc ${mmcdev}:${mmcpart} ${fdt_addr} ${fdt_file}\0" \
++	"mmcboot=echo Booting from mmc ...; " \
++		"run mmcargs; " \
++		"if test ${boot_fdt} = yes || test ${boot_fdt} = try; then " \
++			"if run loadfdt; then " \
++				"bootz ${loadaddr} - ${fdt_addr}; " \
++			"else " \
++				"if test ${boot_fdt} = try; then " \
++					"bootz; " \
++				"else " \
++					"echo WARN: Cannot load the DT; " \
++				"fi; " \
++			"fi; " \
++		"else " \
++			"bootz; " \
++		"fi;\0" \
++	"netargs=setenv bootargs console=${console},${baudrate} " \
++		"root=/dev/nfs " \
++	"ip=dhcp nfsroot=${serverip}:${nfsroot},v3,tcp\0" \
++		"netboot=echo Booting from net ...; " \
++		"run netargs; " \
++		"if test ${ip_dyn} = yes; then " \
++			"setenv get_cmd dhcp; " \
++		"else " \
++			"setenv get_cmd tftp; " \
++		"fi; " \
++		"${get_cmd} ${image}; " \
++		"if test ${boot_fdt} = yes || test ${boot_fdt} = try; then " \
++			"if ${get_cmd} ${fdt_addr} ${fdt_file}; then " \
++				"bootz ${loadaddr} - ${fdt_addr}; " \
++			"else " \
++				"if test ${boot_fdt} = try; then " \
++					"bootz; " \
++				"else " \
++					"echo WARN: Cannot load the DT; " \
++				"fi; " \
++			"fi; " \
++		"else " \
++			"bootz; " \
++		"fi;\0"
++#elif CONFIG_512MB_LPDDR2
++#define CONFIG_EXTRA_ENV_SETTINGS \
++	CONFIG_MFG_ENV_SETTINGS \
++	UPDATE_M4_ENV \
++	CONFIG_VIDEO_MODE \
++	"script=boot.scr\0" \
++	"image=zImage\0" \
++	"console=ttymxc2\0" \
++	"fdt_high=0xffffffff\0" \
++	"initrd_high=0xffffffff\0" \
++	"fdt_file=imx6sxscm-512mb-evb-ldo.dtb\0" \
++	"fdt_addr=0x83000000\0" \
++	"boot_fdt=try\0" \
++	"ip_dyn=yes\0" \
++	"mmcdev="__stringify(CONFIG_SYS_MMC_ENV_DEV)"\0" \
++	"mmcpart=1\0" \
++	"mmcroot=" CONFIG_MMCROOT " rootwait rw\0" \
++	"mmcautodetect=yes\0" \
++	"mmcargs=setenv bootargs console=${console},${baudrate} " \
++		"root=${mmcroot}\0" \
++	"loadbootscript=" \
++		"fatload mmc ${mmcdev}:${mmcpart} ${loadaddr} ${script};\0" \
++	"bootscript=echo Running bootscript from mmc ...; " \
++		"source\0" \
++	"loadimage=fatload mmc ${mmcdev}:${mmcpart} ${loadaddr} ${image}\0" \
++	"loadfdt=fatload mmc ${mmcdev}:${mmcpart} ${fdt_addr} ${fdt_file}\0" \
++	"mmcboot=echo Booting from mmc ...; " \
++		"run mmcargs; " \
++		"if test ${boot_fdt} = yes || test ${boot_fdt} = try; then " \
++			"if run loadfdt; then " \
++				"bootz ${loadaddr} - ${fdt_addr}; " \
++			"else " \
++				"if test ${boot_fdt} = try; then " \
++					"bootz; " \
++				"else " \
++					"echo WARN: Cannot load the DT; " \
++				"fi; " \
++			"fi; " \
++		"else " \
++			"bootz; " \
++		"fi;\0" \
++	"netargs=setenv bootargs console=${console},${baudrate} " \
++		"root=/dev/nfs " \
++	"ip=dhcp nfsroot=${serverip}:${nfsroot},v3,tcp\0" \
++		"netboot=echo Booting from net ...; " \
++		"run netargs; " \
++		"if test ${ip_dyn} = yes; then " \
++			"setenv get_cmd dhcp; " \
++		"else " \
++			"setenv get_cmd tftp; " \
++		"fi; " \
++		"${get_cmd} ${image}; " \
++		"if test ${boot_fdt} = yes || test ${boot_fdt} = try; then " \
++			"if ${get_cmd} ${fdt_addr} ${fdt_file}; then " \
++				"bootz ${loadaddr} - ${fdt_addr}; " \
++			"else " \
++				"if test ${boot_fdt} = try; then " \
++					"bootz; " \
++				"else " \
++					"echo WARN: Cannot load the DT; " \
++				"fi; " \
++			"fi; " \
++		"else " \
++			"bootz; " \
++		"fi;\0"
++#else
+ #define CONFIG_EXTRA_ENV_SETTINGS \
+ 	CONFIG_MFG_ENV_SETTINGS \
+ 	UPDATE_M4_ENV \
+@@ -93,4 +229,6 @@
+ 			"bootz; " \
+ 		"fi;\0"
+ 
++#endif				
+ #endif				/* __MX6SXSCM_H */
++
+-- 
+1.9.1
+

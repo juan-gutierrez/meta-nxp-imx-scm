@@ -1,0 +1,28 @@
+From a3d51e1c852e19fd53c31443265e1eb8c1ae26cd Mon Sep 17 00:00:00 2001
+From: Alejandro Sierra <b18039@freescale.com>
+Date: Fri, 22 Apr 2016 17:35:59 -0500
+Subject: [PATCH 06/11] enet reference clock pin assignment
+
+enet reference clock pin assignment
+
+Signed-off-by: Alejandro Sierra <b18039@freescale.com>
+---
+ board/freescale/mx6sxscm/mx6sxscm.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/board/freescale/mx6sxscm/mx6sxscm.c b/board/freescale/mx6sxscm/mx6sxscm.c
+index 8733ea8..a73c769 100644
+--- a/board/freescale/mx6sxscm/mx6sxscm.c
++++ b/board/freescale/mx6sxscm/mx6sxscm.c
+@@ -206,7 +206,7 @@ static iomux_v3_cfg_t const fec2_pads[] = {
+ 
+ static iomux_v3_cfg_t const phy_control_pads[] = {
+ 	/* 25MHz Ethernet PHY Clock */
+-	MX6_PAD_ENET1_TX_CLK__ENET1_REF_CLK1 | MUX_PAD_CTRL(ENET_CLK_PAD_CTRL),
++	MX6_PAD_ENET2_RX_CLK__ENET2_REF_CLK_25M | MUX_PAD_CTRL(ENET_CLK_PAD_CTRL),
+ 
+ 	/* ENET PHY Power */
+ 	MX6_PAD_QSPI1B_DATA1__GPIO4_IO_25 | MUX_PAD_CTRL(NO_PAD_CTRL),
+-- 
+1.9.1
+

@@ -1,0 +1,35 @@
+From f609d566e90ec8f7dbcdce7ce507c5a932a701c0 Mon Sep 17 00:00:00 2001
+From: Juan Gutierrez <juan.gutierrez@nxp.com>
+Date: Tue, 12 Apr 2016 18:03:47 -0500
+Subject: [PATCH 02/11] mx6sxscm: Use proper gpios for lvds/lcd backlight
+
+Signed-off-by: Juan Gutierrez <juan.gutierrez@nxp.com>
+---
+ board/freescale/mx6sxscm/mx6sxscm.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/board/freescale/mx6sxscm/mx6sxscm.c b/board/freescale/mx6sxscm/mx6sxscm.c
+index 7d7fb19..f40ac9f 100644
+--- a/board/freescale/mx6sxscm/mx6sxscm.c
++++ b/board/freescale/mx6sxscm/mx6sxscm.c
+@@ -370,7 +370,7 @@ void do_enable_lvds(struct lcd_panel_info_t const *dev)
+ 	gpio_direction_output(IMX_GPIO_NR(4, 18) , 1);
+ 
+ 	/* Set Brightness to high */
+-	gpio_direction_output(IMX_GPIO_NR(6, 3) , 1);
++	gpio_direction_output(IMX_GPIO_NR(4, 11) , 1);
+ }
+ 
+ void do_enable_parallel_lcd(struct lcd_panel_info_t const *dev)
+@@ -383,7 +383,7 @@ void do_enable_parallel_lcd(struct lcd_panel_info_t const *dev)
+ 	gpio_direction_output(IMX_GPIO_NR(3, 27) , 1);
+ 
+ 	/* Set Brightness to high */
+-	gpio_direction_output(IMX_GPIO_NR(6, 4) , 1);
++	gpio_direction_output(IMX_GPIO_NR(4, 18) , 1);
+ }
+ 
+ static struct lcd_panel_info_t const displays[] = {{
+-- 
+1.9.1
+

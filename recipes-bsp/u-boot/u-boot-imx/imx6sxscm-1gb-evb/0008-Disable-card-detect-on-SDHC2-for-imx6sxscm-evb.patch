@@ -1,0 +1,30 @@
+From 2f89c292d8b42e71d87ef1a6f02de87e81af1f82 Mon Sep 17 00:00:00 2001
+From: Alejandro Sierra <b18039@freescale.com>
+Date: Wed, 4 May 2016 15:50:35 -0500
+Subject: [PATCH 08/11] Disable card detect on SDHC2 for imx6sxscm evb
+
+Disable card detect on SDHC2 for imx6sxscm evb board. This signal is used
+by bluetooth module on the UART interface.
+
+Signed-off-by: Alejandro Sierra <b18039@freescale.com>
+---
+ board/freescale/mx6sxscm/mx6sxscm.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/board/freescale/mx6sxscm/mx6sxscm.c b/board/freescale/mx6sxscm/mx6sxscm.c
+index 91c2222..7444636 100644
+--- a/board/freescale/mx6sxscm/mx6sxscm.c
++++ b/board/freescale/mx6sxscm/mx6sxscm.c
+@@ -708,7 +708,8 @@ int board_mmc_getcd(struct mmc *mmc)
+ 		ret = 1; /* Assume uSDHC2 is always present */
+ 		break;
+ 	case USDHC3_BASE_ADDR:
+-		ret = !gpio_get_value(USDHC3_CD_GPIO);
++		//ret = !gpio_get_value(USDHC3_CD_GPIO);
++                ret = 1;
+ 		break;
+ 	case USDHC4_BASE_ADDR:
+ #ifdef CONFIG_MX6SXSABRESD_EMMC_REWORK
+-- 
+1.9.1
+

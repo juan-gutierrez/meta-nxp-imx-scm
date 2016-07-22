@@ -1,0 +1,32 @@
+From fe3f88768e40ad313777f62bcc77b46c3e60bfeb Mon Sep 17 00:00:00 2001
+From: Alejandro Sierra <b18039@freescale.com>
+Date: Tue, 3 May 2016 14:45:07 -0500
+Subject: [PATCH 07/11] Set SWBST pfuze voltage to enable USB host mode
+
+Set SWBST pfuze voltage to enable USB host mode
+
+Signed-off-by: Alejandro Sierra <b18039@freescale.com>
+---
+ board/freescale/mx6sxscm/mx6sxscm.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/board/freescale/mx6sxscm/mx6sxscm.c b/board/freescale/mx6sxscm/mx6sxscm.c
+index a73c769..91c2222 100644
+--- a/board/freescale/mx6sxscm/mx6sxscm.c
++++ b/board/freescale/mx6sxscm/mx6sxscm.c
+@@ -530,6 +530,12 @@ int power_init_board(void)
+ 	reg |= (LDOB_2_80V | (1 << LDO_EN));
+ 	pmic_reg_write(pfuze, PFUZE100_VGEN3VOL, reg);
+ 
++	/* set SWBST boost regulator mode */
++	pmic_reg_read(pfuze, PFUZE100_SWBSTCON1, &reg);
++	reg &= ~SWBST_MODE_MASK;
++	reg |= SWBST_MODE_AUTO;
++	pmic_reg_write(pfuze, PFUZE100_SWBSTCON1, reg);
++
+ 	return 0;
+ }
+ 
+-- 
+1.9.1
+

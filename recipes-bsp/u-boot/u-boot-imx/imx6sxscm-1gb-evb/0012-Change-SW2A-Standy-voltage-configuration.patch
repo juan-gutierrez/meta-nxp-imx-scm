@@ -1,0 +1,41 @@
+From 4c7dc0d20ee312d46f3c8ea50b4e04f65ffcc93d Mon Sep 17 00:00:00 2001
+From: Alejandro Sierra <b18039@freescale.com>
+Date: Mon, 11 Jul 2016 13:20:35 -0500
+Subject: [PATCH 12/12] Change SW2A Standy voltage configuration
+
+SW2A is connected to LPDDR2 1.2V domain. This value should be remain
+when the system enters to standby mode.
+
+Signed-off-by: Alejandro Sierra <b18039@freescale.com>
+---
+ board/freescale/mx6sxscm/mx6sxscm.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/board/freescale/mx6sxscm/mx6sxscm.c b/board/freescale/mx6sxscm/mx6sxscm.c
+index 6b9cb67..bd7c475 100644
+--- a/board/freescale/mx6sxscm/mx6sxscm.c
++++ b/board/freescale/mx6sxscm/mx6sxscm.c
+@@ -522,6 +522,12 @@ int power_init_board(void)
+ 	reg |= 0x20;
+ 	pmic_reg_write(pfuze, PFUZE100_SW3AVOL, reg);
+ 
++    /* set SW3A standby volatage 1.2V */
++    pmic_reg_read(pfuze, PFUZE100_SW3ASTBY, &reg);
++    reg &= ~0x3f;
++    reg |= 0x20;
++     pmic_reg_write(pfuze, PFUZE100_SW3ASTBY, reg);
++
+ 	/* set SW1AB normal volatage 1.350V */
+ 	pmic_reg_read(pfuze, PFUZE100_SW1ABVOL, &reg);
+ 	reg &= ~0x3f;
+@@ -549,6 +555,7 @@ int power_init_board(void)
+ 	pmic_reg_read(pfuze, PFUZE100_SWBSTCON1, &reg);
+ 	reg &= ~SWBST_MODE_MASK;
+ 	reg |= SWBST_MODE_AUTO;
++	reg |= 0x40;
+ 	pmic_reg_write(pfuze, PFUZE100_SWBSTCON1, reg);
+ 
+ 	return 0;
+-- 
+1.9.1
+
