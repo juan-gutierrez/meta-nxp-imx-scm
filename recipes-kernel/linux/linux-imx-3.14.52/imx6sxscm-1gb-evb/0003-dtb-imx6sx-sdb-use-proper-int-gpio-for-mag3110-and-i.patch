@@ -1,0 +1,59 @@
+From 3525151e16a6492d110572a52fd6291b44f2a35e Mon Sep 17 00:00:00 2001
+From: Juan Gutierrez <juan.gutierrez@nxp.com>
+Date: Tue, 12 Apr 2016 19:19:11 -0500
+Subject: [PATCH 03/23] dtb: imx6sx-sdb: use proper int gpio for mag3110 and
+ isl29023
+
+To test mag3110 need to be enable first as
+
+echo 1 > /sys/devices/virtual/input/inputX/enable
+
+Use evtest application to test it
+
+To test the isl29023 use the corresponding unit test
+
+/unit_tests/mxc_isl29023.out
+
+Signed-off-by: Juan Gutierrez <juan.gutierrez@nxp.com>
+---
+ arch/arm/boot/dts/imx6sx-sdb.dts | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/arch/arm/boot/dts/imx6sx-sdb.dts b/arch/arm/boot/dts/imx6sx-sdb.dts
+index d409321..94ac190 100644
+--- a/arch/arm/boot/dts/imx6sx-sdb.dts
++++ b/arch/arm/boot/dts/imx6sx-sdb.dts
+@@ -659,8 +659,8 @@
+ 		compatible = "fsl,mag3110";
+ 		reg = <0x0e>;
+ 		position = <2>;
+-		interrupt-parent = <&gpio6>;
+-		interrupts = <5 1>;
++		interrupt-parent = <&gpio4>;
++		interrupts = <22 1>;
+ 		shared-interrupt;
+ 	};
+ 
+@@ -668,8 +668,8 @@
+ 		compatible = "fsl,isl29023";
+ 		reg = <0x44>;
+ 		rext = <499>;
+-		interrupt-parent = <&gpio6>;
+-		interrupts = <5 1>;
++		interrupt-parent = <&gpio4>;
++		interrupts = <22 1>;
+ 		shared-interrupt;
+ 	};
+ };
+@@ -715,7 +715,7 @@
+ 		pinctrl_hog: hoggrp {
+ 			fsl,pins = <
+ 				MX6SX_PAD_SD1_DATA0__GPIO6_IO_2 0x17059
+-				MX6SX_PAD_SD1_DATA3__GPIO6_IO_5 0xb000
++				MX6SX_PAD_QSPI1A_SS0_B__GPIO4_IO_22 0xb000
+ 				MX6SX_PAD_CSI_DATA03__GPIO1_IO_17 0x17059
+ 				MX6SX_PAD_GPIO1_IO13__WDOG1_WDOG_ANY 0x30b0
+ 				MX6SX_PAD_QSPI1A_SCLK__GPIO4_IO_21  0x17059
+-- 
+1.9.1
+

@@ -1,0 +1,37 @@
+From 3bcaacf7a63cdeabb7b1ff9ed5e1d4d827c35033 Mon Sep 17 00:00:00 2001
+From: Juan Gutierrez <juan.gutierrez@nxp.com>
+Date: Wed, 25 May 2016 20:26:59 -0500
+Subject: [PATCH 17/23] ARM: dts: set CAN tx_en_gpio so sdtby is deasserted
+
+The CAN phy does not have a tx_enable signal however the
+configuration expects to succesfully set this signal before
+deasserting the stdby.
+
+We cannot use the default GPIO4_25 as tx_enable_gpio since
+this is now used (on the SCM SX EVB) for ENET_PWR_EN signal.
+However, we can reuse the same GPIO4_27 as the tx_en_gpio
+and as the tx_stdby_gpio.
+
+Signed-off-by: Juan Gutierrez <juan.gutierrez@nxp.com>
+---
+ arch/arm/boot/dts/imx6sxscm-evb.dtsi | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/arch/arm/boot/dts/imx6sxscm-evb.dtsi b/arch/arm/boot/dts/imx6sxscm-evb.dtsi
+index c12def3..f628089 100644
+--- a/arch/arm/boot/dts/imx6sxscm-evb.dtsi
++++ b/arch/arm/boot/dts/imx6sxscm-evb.dtsi
+@@ -239,3 +239,10 @@
+ 	status = "disabled";
+ };
+ 
++&flexcan1 {
++    trx-en-gpio = <&gpio4 27 GPIO_ACTIVE_LOW>;
++};
++
++&flexcan2 {
++    trx-en-gpio = <&gpio4 27 GPIO_ACTIVE_LOW>;
++};
+-- 
+1.9.1
+

@@ -1,0 +1,29 @@
+From 273ca36fe2fa94521da6cd6b99b4824e9c896585 Mon Sep 17 00:00:00 2001
+From: Alejandro Sierra <b18039@freescale.com>
+Date: Thu, 2 Jun 2016 15:49:38 -0500
+Subject: [PATCH 19/23] MXSCM-178: ARM: dts: imx6sxscm emmc DDR50 enable
+
+imx6sxscm epop eMMC was unable to swtich to highspeed
+and operate in DDR50 mode due to a voltage limitation on the configuration.
+A no-1-8-v to avoid being configured to this voltage.
+
+Signed-off-by: Alejandro Sierra <b18039@freescale.com>
+---
+ arch/arm/boot/dts/imx6sxscm-emmc.dtsi | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/arch/arm/boot/dts/imx6sxscm-emmc.dtsi b/arch/arm/boot/dts/imx6sxscm-emmc.dtsi
+index 899ee70..257c1dc 100644
+--- a/arch/arm/boot/dts/imx6sxscm-emmc.dtsi
++++ b/arch/arm/boot/dts/imx6sxscm-emmc.dtsi
+@@ -17,6 +17,7 @@
+ 	 */
+ 	cd-gpios = <>;
+ 	wp-gpios = <>;
++	no-1-8-v;
+ 	non-removable;
+ 	status = "okay";
+ };
+-- 
+1.9.1
+

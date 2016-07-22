@@ -1,0 +1,101 @@
+From f5ab8bdff6567474bc51d7d4d491b4be04bd7b0f Mon Sep 17 00:00:00 2001
+From: Juan Gutierrez <juan.gutierrez@nxp.com>
+Date: Mon, 25 Apr 2016 23:07:10 -0500
+Subject: [PATCH 14/23] ARM: dts: add support for ov5640 camera for sx scm
+ boards
+
+For sxscm boards the camera is connected on the i2c4 port.
+Configuration is device tree is updated to reflect this change.
+Some voltage regulators (used by camera) also need to be
+enabled on configuration for the pmic.
+
+Signed-off-by: Juan Gutierrez <juan.gutierrez@nxp.com>
+---
+ arch/arm/boot/dts/imx6sxscm-evb.dtsi | 43 +++++++++++++++++++++++++++++++-----
+ 1 file changed, 38 insertions(+), 5 deletions(-)
+
+diff --git a/arch/arm/boot/dts/imx6sxscm-evb.dtsi b/arch/arm/boot/dts/imx6sxscm-evb.dtsi
+index b1756b7..dc1a9b3 100644
+--- a/arch/arm/boot/dts/imx6sxscm-evb.dtsi
++++ b/arch/arm/boot/dts/imx6sxscm-evb.dtsi
+@@ -86,17 +86,17 @@
+ 				regulator-always-on;
+ 			};
+ /*
+-			vgen1_reg: vgen1 {
++			vgen1_reg_scm: vgen1 {
+ 				regulator-min-microvolt = <800000>;
+ 				regulator-max-microvolt = <1550000>;
+ 				regulator-always-on;
+ 			};
+-
+-			vgen2_reg: vgen2 {
++*/
++			vgen2_reg_scm: vgen2 {
+ 				regulator-min-microvolt = <800000>;
+ 				regulator-max-microvolt = <1550000>;
+ 			};
+-*/
++
+ 			vgen3_reg_scm: vgen3 {
+ 				regulator-min-microvolt = <1800000>;
+ 				regulator-max-microvolt = <2800000>;
+@@ -109,7 +109,7 @@
+ 				regulator-always-on;
+ 			};
+ /*
+-			vgen5_reg: vgen5 {
++			vgen5_reg_scm: vgen5 {
+ 				regulator-min-microvolt = <1800000>;
+ 				regulator-max-microvolt = <3300000>;
+ 				regulator-always-on;
+@@ -124,6 +124,17 @@
+ 	};
+ };
+ 
++&csi1 {
++    status = "okay";
++
++    port {
++        csi1_ep_scm: endpoint {
++            remote-endpoint = <&ov5640_ep_scm>;
++        };
++    };
++};
++
++
+ &i2c4 {
+         clock-frequency = <100000>;
+         pinctrl-names = "default";
+@@ -144,6 +155,28 @@
+                 SPKVDD2-supply = <&reg_psu_5v>;
+                 amic-mono;
+         };
++
++        ov5640_scm: ov5640@3c {
++                 compatible = "ovti,ov5640";
++                 reg = <0x3c>;
++                 pinctrl-names = "default";
++                 pinctrl-0 = <&pinctrl_csi_0>;
++                 clocks = <&clks IMX6SX_CLK_CSI>;
++                 clock-names = "csi_mclk";
++                 AVDD-supply = <&vgen3_reg_scm>;
++                 DVDD-supply = <&vgen2_reg_scm>;
++                 pwn-gpios = <&gpio3 28 1>;
++                 rst-gpios = <&gpio3 27 0>;
++                 csi_id = <0>;
++                 mclk = <24000000>;
++                 mclk_source = <0>;
++                 port {
++                     ov5640_ep_scm: endpoint {
++                         remote-endpoint = <&csi1_ep_scm>;
++                     };
++                 };
++        };
++
+ };
+ 
+ &iomuxc {
+-- 
+1.9.1
+

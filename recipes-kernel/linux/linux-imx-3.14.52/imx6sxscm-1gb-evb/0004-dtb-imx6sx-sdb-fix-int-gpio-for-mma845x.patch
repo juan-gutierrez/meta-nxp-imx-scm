@@ -1,0 +1,43 @@
+From a06e967d9675ecf858c4984349c3c5c495147d34 Mon Sep 17 00:00:00 2001
+From: Juan Gutierrez <juan.gutierrez@nxp.com>
+Date: Tue, 12 Apr 2016 20:23:46 -0500
+Subject: [PATCH 04/23] dtb: imx6sx-sdb: fix int gpio for mma845x
+
+To test mma845x need to be enable first as
+
+ echo 1 > /sys/devices/virtual/input/inputX/enable
+
+Use evtest application to test it
+
+Signed-off-by: Juan Gutierrez <juan.gutierrez@nxp.com>
+---
+ arch/arm/boot/dts/imx6sx-sdb.dts | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/arch/arm/boot/dts/imx6sx-sdb.dts b/arch/arm/boot/dts/imx6sx-sdb.dts
+index 94ac190..1c8992e 100644
+--- a/arch/arm/boot/dts/imx6sx-sdb.dts
++++ b/arch/arm/boot/dts/imx6sx-sdb.dts
+@@ -650,8 +650,8 @@
+ 		compatible = "fsl,mma8451";
+ 		reg = <0x1c>;
+ 		position = <1>;
+-		interrupt-parent = <&gpio6>;
+-		interrupts = <2 8>;
++		interrupt-parent = <&gpio4>;
++		interrupts = <17 8>;
+ 		interrupt-route = <2>;
+ 	};
+ 
+@@ -714,7 +714,7 @@
+ 	imx6x-sdb {
+ 		pinctrl_hog: hoggrp {
+ 			fsl,pins = <
+-				MX6SX_PAD_SD1_DATA0__GPIO6_IO_2 0x17059
++				MX6SX_PAD_QSPI1A_DATA1__GPIO4_IO_17 0x17059
+ 				MX6SX_PAD_QSPI1A_SS0_B__GPIO4_IO_22 0xb000
+ 				MX6SX_PAD_CSI_DATA03__GPIO1_IO_17 0x17059
+ 				MX6SX_PAD_GPIO1_IO13__WDOG1_WDOG_ANY 0x30b0
+-- 
+1.9.1
+

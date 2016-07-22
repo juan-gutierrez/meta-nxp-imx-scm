@@ -1,0 +1,29 @@
+From 90c397cf826c12f47d352d462ddcbf4b79b374d4 Mon Sep 17 00:00:00 2001
+From: Juan Gutierrez <juan.gutierrez@nxp.com>
+Date: Mon, 25 Apr 2016 22:31:34 -0500
+Subject: [PATCH 13/23] ARM: dts: configure vring memory at the top of 512MB
+ memory area
+
+Place the rpmsg vring memory area at the top of the available
+512MB of memory.
+
+Signed-off-by: Juan Gutierrez <juan.gutierrez@nxp.com>
+---
+ arch/arm/boot/dts/imx6sxscm-512mb-evb-m4-ldo.dts | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/arch/arm/boot/dts/imx6sxscm-512mb-evb-m4-ldo.dts b/arch/arm/boot/dts/imx6sxscm-512mb-evb-m4-ldo.dts
+index 69de9a1..c0c7048 100644
+--- a/arch/arm/boot/dts/imx6sxscm-512mb-evb-m4-ldo.dts
++++ b/arch/arm/boot/dts/imx6sxscm-512mb-evb-m4-ldo.dts
+@@ -15,3 +15,7 @@
+  &mcctest{
+ 	status = "disabled";
+  };
++
++ &rpmsg{
++	reg = <0x9FFF0000 0x8000>;
++};
+-- 
+1.9.1
+

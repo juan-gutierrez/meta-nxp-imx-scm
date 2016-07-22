@@ -1,0 +1,33 @@
+From 3e5ccdb232caad7496ee3d21e1918954a7c93585 Mon Sep 17 00:00:00 2001
+From: Juan Gutierrez <juan.gutierrez@nxp.com>
+Date: Tue, 12 Apr 2016 18:05:31 -0500
+Subject: [PATCH 02/23] dtb: imx6sx-sdb: Use proper pinctrl for pwm3 and pwm4
+
+Signed-off-by: Juan Gutierrez <juan.gutierrez@nxp.com>
+---
+ arch/arm/boot/dts/imx6sx-sdb.dts | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/arch/arm/boot/dts/imx6sx-sdb.dts b/arch/arm/boot/dts/imx6sx-sdb.dts
+index 10b594f..d409321 100644
+--- a/arch/arm/boot/dts/imx6sx-sdb.dts
++++ b/arch/arm/boot/dts/imx6sx-sdb.dts
+@@ -916,13 +916,13 @@
+ 
+ 		pinctrl_pwm3: pwm3grp {
+ 			fsl,pins = <
+-				MX6SX_PAD_SD1_DATA2__PWM3_OUT 0x110b0
++				MX6SX_PAD_NAND_DATA06__PWM3_OUT 0x110b0
+ 			>;
+ 		};
+ 
+ 		pinctrl_pwm4: pwm4grp {
+ 			fsl,pins = <
+-				MX6SX_PAD_SD1_DATA1__PWM4_OUT 0x110b0
++				MX6SX_PAD_NAND_DATA07__PWM4_OUT 0x110b0
+ 			>;
+ 		};
+ 
+-- 
+1.9.1
+

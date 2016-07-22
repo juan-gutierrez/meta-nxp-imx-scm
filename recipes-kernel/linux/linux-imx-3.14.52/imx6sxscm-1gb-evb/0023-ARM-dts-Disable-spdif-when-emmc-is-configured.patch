@@ -1,0 +1,29 @@
+From b3aaea62b949c8d5fb4ce848d1d98c554f14d703 Mon Sep 17 00:00:00 2001
+From: Alejandro Sierra <b18039@freescale.com>
+Date: Thu, 9 Jun 2016 16:02:19 -0500
+Subject: [PATCH 23/23] ARM: dts: Disable spdif when emmc is configured
+
+Disable spdif when emmc is configured on imx6sxscm evb.
+Both interfaces share the same pin.
+
+Signed-off-by: Alejandro Sierra <b18039@freescale.com>
+---
+ arch/arm/boot/dts/imx6sxscm-emmc.dtsi | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/arch/arm/boot/dts/imx6sxscm-emmc.dtsi b/arch/arm/boot/dts/imx6sxscm-emmc.dtsi
+index 257c1dc..07d4863 100644
+--- a/arch/arm/boot/dts/imx6sxscm-emmc.dtsi
++++ b/arch/arm/boot/dts/imx6sxscm-emmc.dtsi
+@@ -21,3 +21,8 @@
+ 	non-removable;
+ 	status = "okay";
+ };
++
++&spdif {
++	status = "disabled";
++};
++
+-- 
+1.9.1
+

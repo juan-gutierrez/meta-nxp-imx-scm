@@ -1,0 +1,148 @@
+From ac642fc8634d84272b8c030386a246d2dceec292 Mon Sep 17 00:00:00 2001
+From: Alejandro Sierra <b18039@freescale.com>
+Date: Fri, 22 Apr 2016 15:00:39 -0500
+Subject: [PATCH 10/23] ARM: dts: add support for imx6sx-512mb-xtop board
+
+Support for imx6sx-512mb-xtop board. This board is used to validate
+VLINK board. It's based on SDB board with 512MB of LPDDR2 and PFUZE0100
+
+Signed-off-by: Alejandro Sierra <b18039@freescale.com>
+---
+ arch/arm/boot/dts/imx6sx-512mb-xtop-ldo-m4.dts | 99 ++++++++++++++++++++++++++
+ arch/arm/boot/dts/imx6sx-512mb-xtop-ldo.dts    | 18 +++++
+ 2 files changed, 117 insertions(+)
+ create mode 100644 arch/arm/boot/dts/imx6sx-512mb-xtop-ldo-m4.dts
+ create mode 100644 arch/arm/boot/dts/imx6sx-512mb-xtop-ldo.dts
+
+diff --git a/arch/arm/boot/dts/imx6sx-512mb-xtop-ldo-m4.dts b/arch/arm/boot/dts/imx6sx-512mb-xtop-ldo-m4.dts
+new file mode 100644
+index 0000000..a174649
+--- /dev/null
++++ b/arch/arm/boot/dts/imx6sx-512mb-xtop-ldo-m4.dts
+@@ -0,0 +1,99 @@
++/*
++ * Copyright 2012 Freescale Semiconductor, Inc.
++ * Copyright 2011 Linaro Ltd.
++ *
++ * The code contained herein is licensed under the GNU General Public
++ * License. You may obtain a copy of the GNU General Public License
++ * Version 2 or later at the following locations:
++ *
++ * http://www.opensource.org/licenses/gpl-license.html
++ * http://www.gnu.org/copyleft/gpl.html
++ */
++
++#include "imx6sx-sdb-ldo.dts"
++/{
++ 	memory {
++		linux,usable-memory = <0x80000000 0x1ff00000>
++	};
++ };
++
++&iomuxc {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_hog>;
++};
++
++/*
++ * The flollowing modules are conflicting with M4, disable them when m4
++ * is running.
++ */
++&adc1 {
++        status = "disabled";
++};
++
++&adc2 {
++        status = "disabled";
++};
++
++&flexcan1 {
++	status = "disabled";
++};
++
++&flexcan2 {
++	status = "disabled";
++};
++
++&i2c3 {
++        status = "disabled";
++};
++
++&mcctest{
++	status = "okay";
++};
++
++&mcctty{
++	status = "okay";
++};
++
++&ocram {
++	reg = <0x00901000 0xf000>;
++};
++
++&qspi2 {
++	status = "disabled";
++};
++
++&qspi_m4 {
++	status = "okay";
++};
++
++&rpmsg{
++	status = "okay";
++};
++
++&uart2 {
++	status = "disabled";
++};
++
++&clks {
++	fsl,shared-clks-number = <0x23>;
++	fsl,shared-clks-index = <IMX6SX_CLK_PLL2_BUS IMX6SX_CLK_PLL2_PFD0
++			IMX6SX_CLK_PLL2_PFD2 IMX6SX_CLK_PLL3_USB_OTG
++			IMX6SX_CLK_PLL3_PFD1 IMX6SX_CLK_PLL3_PFD2
++			IMX6SX_CLK_PLL3_PFD3 IMX6SX_CLK_PLL4_AUDIO
++			IMX6SX_CLK_PLL5_VIDEO
++			IMX6SX_CLK_OCRAM IMX6SX_CLK_CAN1_SERIAL
++			IMX6SX_CLK_CAN1_IPG IMX6SX_CLK_CAN2_SERIAL
++			IMX6SX_CLK_CAN2_IPG IMX6SX_CLK_CANFD
++			IMX6SX_CLK_ECSPI1 IMX6SX_CLK_ECSPI2
++			IMX6SX_CLK_ECSPI3 IMX6SX_CLK_ECSPI4
++			IMX6SX_CLK_ECSPI5 IMX6SX_CLK_QSPI1
++			IMX6SX_CLK_QSPI2 IMX6SX_CLK_SSI1
++			IMX6SX_CLK_SSI2 IMX6SX_CLK_SSI3
++			IMX6SX_CLK_UART_SERIAL IMX6SX_CLK_UART_IPG
++			IMX6SX_CLK_PERIPH_CLK2_SEL IMX6SX_CLK_OCRAM_ALT_SEL
++			IMX6SX_CLK_I2C1 IMX6SX_CLK_I2C2
++			IMX6SX_CLK_I2C3 IMX6SX_CLK_I2C4
++			IMX6SX_CLK_EPIT1 IMX6SX_CLK_EPIT2>;
++	fsl,shared-mem-addr = <0x91F000>;
++	fsl,shared-mem-size = <0x1000>;
++};
+diff --git a/arch/arm/boot/dts/imx6sx-512mb-xtop-ldo.dts b/arch/arm/boot/dts/imx6sx-512mb-xtop-ldo.dts
+new file mode 100644
+index 0000000..fe83e60
+--- /dev/null
++++ b/arch/arm/boot/dts/imx6sx-512mb-xtop-ldo.dts
+@@ -0,0 +1,18 @@
++/*
++ * Copyright 2012 Freescale Semiconductor, Inc.
++ * Copyright 2011 Linaro Ltd.
++ *
++ * The code contained herein is licensed under the GNU General Public
++ * License. You may obtain a copy of the GNU General Public License
++ * Version 2 or later at the following locations:
++ *
++ * http://www.opensource.org/licenses/gpl-license.html
++ * http://www.gnu.org/copyleft/gpl.html
++ */
++
++#include "imx6sx-sdb-ldo.dts"
++/{
++ 	memory {
++		reg = <0x80000000 0x20000000>;
++ 	};
++ };
+-- 
+1.9.1
+

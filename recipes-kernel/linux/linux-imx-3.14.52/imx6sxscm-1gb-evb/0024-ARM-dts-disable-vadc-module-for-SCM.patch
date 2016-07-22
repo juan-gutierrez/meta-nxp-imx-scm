@@ -1,0 +1,29 @@
+From a8494df9589d376a3f5c4f1aba23423d99782be9 Mon Sep 17 00:00:00 2001
+From: Juan Gutierrez <juan.gutierrez@nxp.com>
+Date: Thu, 7 Jul 2016 13:39:48 -0500
+Subject: [PATCH 24/26] ARM: dts: disable vadc module for SCM
+
+vadc is not present in the footprint of the SCM package
+so we can disbale it to avoid the installation of the
+kernel module that could lead to hangs, since the hw
+module does not exist for SCM packages
+
+Signed-off-by: Juan Gutierrez <juan.gutierrez@nxp.com>
+---
+ arch/arm/boot/dts/imx6sxscm-evb.dtsi | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/arch/arm/boot/dts/imx6sxscm-evb.dtsi b/arch/arm/boot/dts/imx6sxscm-evb.dtsi
+index c89b895..eb011aa 100644
+--- a/arch/arm/boot/dts/imx6sxscm-evb.dtsi
++++ b/arch/arm/boot/dts/imx6sxscm-evb.dtsi
+@@ -257,3 +257,6 @@
+ 	vmmc-supply = <>;
+ };
+ 
++&vadc {
++	status = "disabled";
++};
+-- 
+1.9.1
+

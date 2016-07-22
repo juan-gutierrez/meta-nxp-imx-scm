@@ -1,0 +1,52 @@
+From 7f3aadcf55844d5bdd30196b6129f1b1501abff3 Mon Sep 17 00:00:00 2001
+From: Juan Gutierrez <juan.gutierrez@nxp.com>
+Date: Mon, 11 Jul 2016 18:21:20 -0500
+Subject: [PATCH 26/26] workaround: reset on DSM when wakeup dev enabled
+
+When a device like (USB, CAMM, tty, etc) prevents the megamix
+domain to power down (by enabling a wakeup source) during the
+suspend process, it is assumed the MMDC will stay ON. This is
+true for DDR3, but no for LPDDR2. Under this assumption the
+MMDC context is not restored during the resume phase (it was
+supposed to stay power on).
+
+For the DDR3 case a weak regulator ldo_2p5 is enabled during
+DSM, keeping the DDR always ON (needed for DDR pre-drivers).
+
+However, the weak is not enabled for LPDDR2 case, hence the
+MMDC context will be lost during DSM and should be always
+restored regardless of if there is or not a wakeup device.
+
+This workaround allows the MMDC context to be always restored
+
+So it fixed the suspend cases in SCM SX (LPDDR2) where a USB
+or CAAM prevent the megamix domain to be power off, since the
+MMDC context was not restored, it end up with a system reset
+when trying to resume from DDR memory (without MMDC restored).
+
+Signed-off-by: Juan Gutierrez <juan.gutierrez@nxp.com>
+Signed-off-by: Alejandro Sierra <b18039@freescale.com>
+---
+ arch/arm/mach-imx/suspend-imx6.S | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/arch/arm/mach-imx/suspend-imx6.S b/arch/arm/mach-imx/suspend-imx6.S
+index a292b3f..3e52031 100644
+--- a/arch/arm/mach-imx/suspend-imx6.S
++++ b/arch/arm/mach-imx/suspend-imx6.S
+@@ -255,9 +255,10 @@
+ 	cmp	r6, #0x0
+ 	bne	9f
+ 8:
+-	resume_iomuxc_gpr
+ 
+-	b	13f
++#	resume_iomuxc_gpr
++
++#	b	13f
+ 9:
+ 	/* restore MMDC settings */
+ 	ldr	r6, [r0, #PM_INFO_MMDC_NUM_OFFSET]
+-- 
+1.9.1
+

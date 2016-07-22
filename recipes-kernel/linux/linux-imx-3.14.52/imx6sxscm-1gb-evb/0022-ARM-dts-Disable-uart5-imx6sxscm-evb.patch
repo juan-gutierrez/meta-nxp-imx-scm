@@ -1,0 +1,49 @@
+From add1cbf3e7352ff3f22cf12ef183ffd3ac029890 Mon Sep 17 00:00:00 2001
+From: Alejandro Sierra <b18039@freescale.com>
+Date: Tue, 7 Jun 2016 16:59:13 -0500
+Subject: [PATCH 22/23] ARM: dts: Disable uart5 imx6sxscm evb
+
+Disable uart5 on imx6sxscm evb. This is not the uart
+used for Bluetooth on this board.
+Bluetooth support is added on imx6sxscm-evb-btwifi.dtsi.
+
+Signed-off-by: Alejandro Sierra <b18039@freescale.com>
+---
+ arch/arm/boot/dts/imx6sxscm-evb.dtsi | 14 +++++++++-----
+ 1 file changed, 9 insertions(+), 5 deletions(-)
+
+diff --git a/arch/arm/boot/dts/imx6sxscm-evb.dtsi b/arch/arm/boot/dts/imx6sxscm-evb.dtsi
+index e52b8b0..c89b895 100644
+--- a/arch/arm/boot/dts/imx6sxscm-evb.dtsi
++++ b/arch/arm/boot/dts/imx6sxscm-evb.dtsi
+@@ -23,11 +23,6 @@
+ 	};
+ 
+ };
+-&uart3 {
+-	pinctrl-names = "default";
+-	pinctrl-0 = <&pinctrl_uart3>;
+-	status = "okay";
+-};
+ 
+ &i2c1 {
+ 	pmic: pfuze100@08 {
+@@ -39,6 +34,15 @@
+ 	status = "disabled";
+ };
+ 
++&uart3 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_uart3>;
++	status = "okay";
++};
++
++&uart5 { 
++	status = "disabled";
++};
+ 
+ &i2c2 {
+ 
+-- 
+1.9.1
+

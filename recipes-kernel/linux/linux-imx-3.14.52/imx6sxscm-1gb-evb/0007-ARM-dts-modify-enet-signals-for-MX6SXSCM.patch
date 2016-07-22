@@ -1,0 +1,75 @@
+From 5b96666257c04552edf2b4e540a6f43b0292adef Mon Sep 17 00:00:00 2001
+From: Alejandro Sierra <b18039@freescale.com>
+Date: Wed, 13 Apr 2016 19:29:05 -0500
+Subject: [PATCH 07/23] ARM: dts: modify enet signals for MX6SXSCM
+
+ARM: dts: modify enet signals for MX6SXSCM
+
+Signed-off-by: Alejandro Sierra <b18039@freescale.com>
+---
+ arch/arm/boot/dts/imx6sxscm-evb.dtsi | 36 +++++++++++++++++++++++++++++++++++-
+ 1 file changed, 35 insertions(+), 1 deletion(-)
+
+diff --git a/arch/arm/boot/dts/imx6sxscm-evb.dtsi b/arch/arm/boot/dts/imx6sxscm-evb.dtsi
+index 22759c8..e7feead 100644
+--- a/arch/arm/boot/dts/imx6sxscm-evb.dtsi
++++ b/arch/arm/boot/dts/imx6sxscm-evb.dtsi
+@@ -26,6 +26,10 @@
+ 	};
+ };
+ 
++&uart1 {
++	status = "disabled";
++};
++
+ 
+ &i2c2 {
+ 
+@@ -133,7 +137,6 @@
+         };
+ };
+ 
+-
+ &iomuxc {
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&pinctrl_hog>;
+@@ -146,5 +149,36 @@
+ 			>;
+ 		};
+ 
++		pinctrl_enet1: enet1grp {
++			fsl,pins = <
++				MX6SX_PAD_GPIO1_IO05__ENET1_MDIO	0xa0b1
++				MX6SX_PAD_GPIO1_IO04__ENET1_MDC		0xa0b1
++				MX6SX_PAD_RGMII1_TXC__ENET1_RGMII_TXC	0xa0b9
++				MX6SX_PAD_RGMII1_TD0__ENET1_TX_DATA_0	0xa0b1
++				MX6SX_PAD_RGMII1_TD1__ENET1_TX_DATA_1	0xa0b1
++				MX6SX_PAD_RGMII1_TD2__ENET1_TX_DATA_2	0xa0b1
++				MX6SX_PAD_RGMII1_TD3__ENET1_TX_DATA_3	0xa0b1
++				MX6SX_PAD_RGMII1_TX_CTL__ENET1_TX_EN	0xa0b1
++				MX6SX_PAD_RGMII1_RXC__ENET1_RX_CLK	0x3081
++				MX6SX_PAD_RGMII1_RD0__ENET1_RX_DATA_0	0x3081
++				MX6SX_PAD_RGMII1_RD1__ENET1_RX_DATA_1	0x3081
++				MX6SX_PAD_RGMII1_RD2__ENET1_RX_DATA_2	0x3081
++				MX6SX_PAD_RGMII1_RD3__ENET1_RX_DATA_3	0x3081
++				MX6SX_PAD_RGMII1_RX_CTL__ENET1_RX_EN	0x3081
++				MX6SX_PAD_QSPI1A_DATA0__GPIO4_IO_16	0x80000000
++				MX6SX_PAD_QSPI1B_DATA1__GPIO4_IO_25 	0x80000000
++				MX6SX_PAD_ENET2_RX_CLK__ENET2_REF_CLK_25M	0x91
++			>;
++		};
++
+ 	};
+ };
++
++&fec1 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_enet1>;
++	pinctrl-assert-gpios = <&gpio4 16 GPIO_ACTIVE_HIGH>, <&gpio4 25 GPIO_ACTIVE_LOW>;
++	phy-mode = "rgmii";
++	status = "okay";
++};
++
+-- 
+1.9.1
+

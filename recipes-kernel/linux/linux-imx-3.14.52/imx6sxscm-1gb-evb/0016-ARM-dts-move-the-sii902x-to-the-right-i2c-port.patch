@@ -1,0 +1,54 @@
+From 6b7e336fd25af5c5b0401259501d036995506a2a Mon Sep 17 00:00:00 2001
+From: Juan Gutierrez <juan.gutierrez@nxp.com>
+Date: Thu, 5 May 2016 20:21:10 -0500
+Subject: [PATCH 16/23] ARM: dts: move the sii902x to the right i2c port
+
+The LCD to HDMI sii902x device is on i2c4. This patch
+add the device on the i2c4 and enable it only when the
+lcd interface 1 is active
+
+Signed-off-by: Juan Gutierrez <juan.gutierrez@nxp.com>
+---
+ arch/arm/boot/dts/imx6sxscm-1gb-evb-lcdif1-ldo.dts |  4 ++--
+ arch/arm/boot/dts/imx6sxscm-evb.dtsi               | 10 ++++++++++
+ 2 files changed, 12 insertions(+), 2 deletions(-)
+
+diff --git a/arch/arm/boot/dts/imx6sxscm-1gb-evb-lcdif1-ldo.dts b/arch/arm/boot/dts/imx6sxscm-1gb-evb-lcdif1-ldo.dts
+index 6abb4f8..bd1786c 100644
+--- a/arch/arm/boot/dts/imx6sxscm-1gb-evb-lcdif1-ldo.dts
++++ b/arch/arm/boot/dts/imx6sxscm-1gb-evb-lcdif1-ldo.dts
+@@ -27,8 +27,8 @@
+ 	status = "okay";
+ };
+ 
+-&i2c1 {
+-	sii902x@39 {
++&i2c4 {
++	sii902x_scm: sii902x@39 {
+ 		status = "okay";
+ 	};
+ };
+diff --git a/arch/arm/boot/dts/imx6sxscm-evb.dtsi b/arch/arm/boot/dts/imx6sxscm-evb.dtsi
+index dc1a9b3..c12def3 100644
+--- a/arch/arm/boot/dts/imx6sxscm-evb.dtsi
++++ b/arch/arm/boot/dts/imx6sxscm-evb.dtsi
+@@ -177,6 +177,16 @@
+                  };
+         };
+ 
++	    sii902x_scm: sii902x@39 {
++            compatible = "SiI,sii902x";
++            interrupt-parent = <&gpio4>;
++            interrupts = <21 2>;
++            mode_str ="1280x720M@60";
++            bits-per-pixel = <16>;
++            resets = <&sii902x_reset>;
++            reg = <0x39>;
++            status = "disabled";
++        };
+ };
+ 
+ &iomuxc {
+-- 
+1.9.1
+

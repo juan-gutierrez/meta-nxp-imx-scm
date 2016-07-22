@@ -1,0 +1,29 @@
+From 1b0b37e25ea191069b850365ce13548977ea5ed7 Mon Sep 17 00:00:00 2001
+From: Juan Gutierrez <juan.gutierrez@nxp.com>
+Date: Thu, 7 Jul 2016 14:51:42 -0500
+Subject: [PATCH 25/26] ARM: dts: disable PCIe module for SCM
+
+PCIe is not present in the footprint of the SCM package
+so we can disbale it to avoid the installation of the
+kernel module that could lead to unpredictable behavior.
+
+Signed-off-by: Juan Gutierrez <juan.gutierrez@nxp.com>
+---
+ arch/arm/boot/dts/imx6sxscm-evb.dtsi | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/arch/arm/boot/dts/imx6sxscm-evb.dtsi b/arch/arm/boot/dts/imx6sxscm-evb.dtsi
+index eb011aa..dff14b0 100644
+--- a/arch/arm/boot/dts/imx6sxscm-evb.dtsi
++++ b/arch/arm/boot/dts/imx6sxscm-evb.dtsi
+@@ -260,3 +260,7 @@
+ &vadc {
+ 	status = "disabled";
+ };
++
++&pcie {
++	status = "disabled";
++};
+-- 
+1.9.1
+
